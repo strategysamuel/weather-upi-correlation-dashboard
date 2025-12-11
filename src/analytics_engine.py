@@ -10,6 +10,41 @@ import numpy as np
 from scipy import stats
 from typing import Dict, Tuple, List, Any
 import warnings
+import logging
+
+logger = logging.getLogger(__name__)
+
+def safe_pearsonr(x: pd.Series, y: pd.Series) -> Tuple[float, float]:
+    """
+    Safe Pearson correlation calculation that handles edge cases.
+    
+    Args:
+        x: First variable series
+        y: Second variable series
+        
+    Returns:
+        Tuple of (correlation_coefficient, p_value) or (np.nan, np.nan) if invalid
+    """
+    # Drop NaN values
+    clean_data = pd.DataFrame({'x': x, 'y': y}).dropna()
+    
+    if len(clean_data) < 2:
+        logger.warning(f"Insufficient data points ({len(clean_data)}) for correlation calculation")
+        return np.nan, np.nan
+    
+    x_clean = clean_data['x']
+    y_clean = clean_data['y']
+    
+    # Check for zero standard deviation
+    if x_clean.std() == 0 or y_clean.std() == 0:
+        logger.warning("Zero standard deviation detected - correlation undefined")
+        return np.nan, np.nan
+    
+    try:
+        return stats.pearsonr(x_clean, y_clean)
+    except Exception as e:
+        logger.warning(f"Correlation calculation failed: {e}")
+        return np.nan, np.nan
 
 class CorrelationEngine:
     """
@@ -73,14 +108,9 @@ class CorrelationEngine:
                     
                     # Pearson correlation requires at least 2 data points
                     # With fewer points, correlation is mathematically undefined
-                    if len(clean_data) >= 2:
-                        # Calculate Pearson correlation coefficient and p-value
-                        # We only store the coefficient here; p-value handled separately
-                        corr_coef, _ = stats.pearsonr(clean_data[weather_var], clean_data[txn_var])
-                        correlations[f"{weather_var}_vs_{txn_var}"] = corr_coef
-                    else:
-                        # Mark as NaN when insufficient data for meaningful correlation
-                        correlations[f"{weather_var}_vs_{txn_var}"] = np.nan
+                    # Use safe correlation calculation
+                    corr_coef, _ = safe_pearsonr(merged_df[weather_var], merged_df[txn_var])
+                    correlations[f"{weather_var}_vs_{txn_var}"] = corr_coef
         
         return correlations
     
@@ -166,11 +196,9 @@ class CorrelationEngine:
                     # Remove rows where either variable is NaN
                     clean_data = merged_df[[weather_var, txn_var]].dropna()
                     
-                    if len(clean_data) >= 2:  # Need at least 2 points for correlation
-                        _, p_value = stats.pearsonr(clean_data[weather_var], clean_data[txn_var])
-                        p_values[f"{weather_var}_vs_{txn_var}"] = p_value
-                    else:
-                        p_values[f"{weather_var}_vs_{txn_var}"] = np.nan
+                    # Use safe correlation calculation
+                    _, p_value = safe_pearsonr(merged_df[weather_var], merged_df[txn_var])
+                    p_values[f"{weather_var}_vs_{txn_var}"] = p_value
         
         return p_values
 

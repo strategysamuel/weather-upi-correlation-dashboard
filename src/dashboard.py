@@ -501,7 +501,7 @@ class WeatherUPIDashboard:
             showlegend=True
         )
         
-        st.plotly_chart(fig_upi, use_container_width=True)
+        st.plotly_chart(fig_upi, width='stretch')
         
         # Average Transaction Value Trend
         st.subheader("💰 Average Transaction Value Over Time")
@@ -524,7 +524,7 @@ class WeatherUPIDashboard:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_value, use_container_width=True)
+        st.plotly_chart(fig_value, width='stretch')
         
         st.markdown("---")
         
@@ -643,7 +643,7 @@ class WeatherUPIDashboard:
         fig_weather.update_yaxes(title_text="Humidity (%)", row=3, col=1)
         fig_weather.update_xaxes(title_text="Date", row=3, col=1)
         
-        st.plotly_chart(fig_weather, use_container_width=True)
+        st.plotly_chart(fig_weather, width='stretch')
         
         # Interactive date range selection for detailed view
         st.markdown("---")
@@ -747,7 +747,7 @@ class WeatherUPIDashboard:
                 fig_combined.update_yaxes(title_text="Transaction Value (₹)", row=2, col=1)
                 fig_combined.update_yaxes(title_text="Rainfall (mm)", row=2, col=1, secondary_y=True)
                 
-                st.plotly_chart(fig_combined, use_container_width=True)
+                st.plotly_chart(fig_combined, width='stretch')
             else:
                 st.warning("No data available for the selected zoom range.")
         else:
@@ -817,7 +817,7 @@ class WeatherUPIDashboard:
             tickvals=list(range(len(correlation_matrix.index)))
         )
         
-        st.plotly_chart(fig_heatmap, use_container_width=True)
+        st.plotly_chart(fig_heatmap, width='stretch')
         
         st.markdown("---")
         
@@ -872,8 +872,8 @@ class WeatherUPIDashboard:
                     else:
                         return 'background-color: #f8d7da; color: #721c24'
                 
-                styled_df = corr_df.style.applymap(style_correlation, subset=['Correlation'])
-                st.dataframe(styled_df, use_container_width=True)
+                styled_df = corr_df.style.map(style_correlation, subset=['Correlation'])
+                st.dataframe(styled_df, width='stretch')
                 
                 # Key insights
                 st.subheader("💡 Key Correlation Insights")
@@ -952,7 +952,7 @@ class WeatherUPIDashboard:
                         showlegend=True
                     )
                     
-                    st.plotly_chart(fig_scatter, use_container_width=True)
+                    st.plotly_chart(fig_scatter, width='stretch')
         
         # Correlation interpretation guide
         st.markdown("---")
@@ -1101,7 +1101,7 @@ class WeatherUPIDashboard:
             height=500
         )
         
-        st.plotly_chart(fig_timeline, use_container_width=True)
+        st.plotly_chart(fig_timeline, width='stretch')
         
         st.markdown("---")
         
@@ -1129,7 +1129,7 @@ class WeatherUPIDashboard:
             if available_display_cols:
                 st.dataframe(
                     txn_outlier_data[available_display_cols].sort_values('date'),
-                    use_container_width=True
+                    width='stretch'
                 )
                 
                 # Generate insights for transaction outliers
@@ -1156,7 +1156,7 @@ class WeatherUPIDashboard:
             if available_weather_cols:
                 st.dataframe(
                     weather_outlier_data[available_weather_cols].sort_values('date'),
-                    use_container_width=True
+                    width='stretch'
                 )
                 
                 # Generate insights for weather outliers
@@ -1202,7 +1202,7 @@ class WeatherUPIDashboard:
                     showlegend=False
                 )
                 
-                st.plotly_chart(fig_zscore, use_container_width=True)
+                st.plotly_chart(fig_zscore, width='stretch')
         
         # Anomaly Impact Analysis
         st.markdown("---")
