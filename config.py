@@ -41,3 +41,10 @@ MIN_CORRELATION_SIGNIFICANCE = 0.05  # p-value threshold
 # Dashboard configuration
 DASHBOARD_TITLE = "Weather-UPI Correlation Dashboard"
 DASHBOARD_PORT = 8501
+
+# Live weather data configuration
+USE_LIVE_WEATHER = True
+ALLOW_CSV_FALLBACK = True
+INTERACTIVE_FALLBACK_PROMPT = True
+LIVE_FETCH_RETRY_COUNT = 3
+LIVE_FETCH_RETRY_DELAY_SEC = 2

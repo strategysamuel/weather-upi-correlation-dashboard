@@ -13,6 +13,7 @@ from pathlib import Path
 from datetime import datetime
 import traceback
 import os
+import argparse
 
 # Add src directory to Python path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -359,8 +360,69 @@ class WeatherUPIPipeline:
             self.logger.error(f"Error details saved to {error_file}")
             return False
 
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(
+        description="Weather-UPI Correlation Analysis Pipeline",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python main.py                    # Live-first with interactive fallback
+  python main.py --live-only        # Live-only, no fallback
+  python main.py --csv-only         # CSV-only mode
+  python main.py --silent-fallback  # Live-first with silent fallback
+        """
+    )
+    
+    parser.add_argument(
+        '--live-only',
+        action='store_true',
+        help='Force live API only, disable CSV fallback'
+    )
+    
+    parser.add_argument(
+        '--csv-only',
+        action='store_true',
+        help='Use CSV data only, skip live API'
+    )
+    
+    parser.add_argument(
+        '--silent-fallback',
+        action='store_true',
+        help='Enable silent fallback to CSV if live API fails'
+    )
+    
+    return parser.parse_args()
+
+def configure_from_args(args):
+    """Configure settings based on command line arguments"""
+    if args.live_only:
+        config.USE_LIVE_WEATHER = True
+        config.ALLOW_CSV_FALLBACK = False
+        config.INTERACTIVE_FALLBACK_PROMPT = False
+        print("🔴 Live-only mode: CSV fallback disabled")
+        
+    elif args.csv_only:
+        config.USE_LIVE_WEATHER = False
+        config.ALLOW_CSV_FALLBACK = True
+        config.INTERACTIVE_FALLBACK_PROMPT = False
+        print("📁 CSV-only mode: Live API disabled")
+        
+    elif args.silent_fallback:
+        config.USE_LIVE_WEATHER = True
+        config.ALLOW_CSV_FALLBACK = True
+        config.INTERACTIVE_FALLBACK_PROMPT = False
+        print("🔄 Live-first with silent fallback mode")
+        
+    else:
+        print("🌐 Live-first with interactive fallback mode (default)")
+
 def main():
-    """Main pipeline execution function."""
+    """Main pipeline execution function"""
+    # Parse command line arguments
+    args = parse_arguments()
+    configure_from_args(args)
+    
     pipeline = WeatherUPIPipeline()
     success = pipeline.run_pipeline()
     

@@ -1,0 +1,4 @@
+# file: D:\SAMUEL\Kiro-Projects\weather-upi-insights\config.py
+# hypothesis_version: 6.148.5
+
+[0.05, 2.0, 19.07, 72.88, 8501, 'Asia/Kolkata', 'analytics.csv', 'daily', 'latitude', 'longitude', 'output', 'precipitation_sum', 'src', 'temperature_2m_mean', 'tests', 'timezone']

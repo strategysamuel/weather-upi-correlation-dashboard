@@ -2,20 +2,66 @@
 
 A comprehensive data analytics system that combines live weather data from Mumbai (fetched via Model Context Protocol from Open-Meteo API) with UPI (Unified Payments Interface) transaction data from India to discover correlations between weather patterns and digital payment behaviors. This project demonstrates the power of MCP for external data integration and provides insights into how environmental factors influence financial transactions.
 
+## ⚙️ Configuration
+
+### Live-First Behavior Settings
+
+The system can be configured via `config.py` or environment variables:
+
+```python
+# Live-first weather data configuration
+USE_LIVE_WEATHER = True                    # Enable/disable live API attempts
+ALLOW_CSV_FALLBACK = True                  # Allow fallback to CSV data
+INTERACTIVE_FALLBACK_PROMPT = True         # Prompt user for fallback approval
+LIVE_FETCH_RETRY_COUNT = 3                 # Number of API retry attempts
+LIVE_FETCH_RETRY_DELAY_SEC = 3             # Delay between retries (seconds)
+```
+
+### Operation Modes
+
+| Mode | Live API | CSV Fallback | User Prompt | Use Case |
+|------|----------|--------------|-------------|----------|
+| **Default** | ✅ | ✅ | ✅ | Interactive development |
+| **Live-only** | ✅ | ❌ | ❌ | Production with reliable API |
+| **CSV-only** | ❌ | ✅ | ❌ | Offline development/testing |
+| **Silent fallback** | ✅ | ✅ | ❌ | Automated pipelines |
+
+### Environment Variables
+
+```bash
+# Force live-only mode
+export LIVE_ONLY=true
+
+# Override in Docker
+docker run -e LIVE_ONLY=true weather-upi-insights
+```
+
 ## 🏗️ Architecture Overview
 
-The system follows a modular pipeline architecture with clear separation of concerns, utilizing Model Context Protocol (MCP) for external API communication:
+The system follows a modular pipeline architecture with live-first data fetching and intelligent fallback:
 
 ```
 ┌─────────────────┐    ┌─────────────────┐
 │ Open-Meteo API  │    │   UPI CSV       │
-│ (via MCP)       │    │   Data Files    │
+│ (Live-First)    │    │   Data Files    │
 └─────────┬───────┘    └─────────┬───────┘
-          │                      │
+          │ (primary)            │
           ▼                      │
 ┌─────────────────┐              │
-│ Weather Fallback│              │
-│ (Local CSV)     │              │
+│ Retry Logic     │              │
+│ (3 attempts)    │              │
+└─────────┬───────┘              │
+          │ (on failure)         │
+          ▼                      │
+┌─────────────────┐              │
+│ User Approval   │              │
+│ (Interactive)   │              │
+└─────────┬───────┘              │
+          │ (approved)           │
+          ▼                      │
+┌─────────────────┐              │
+│ Weather CSV     │              │
+│ (Fallback)      │              │
 └─────────┬───────┘              │
           │                      │
           └──────┬─────────────────┘
@@ -23,8 +69,6 @@ The system follows a modular pipeline architecture with clear separation of conc
          ┌───────▼────────┐
          │ Data Pipeline  │
          │ ┌────────────┐ │
-         │ │ MCP Fetch  │ │ ← Model Context Protocol
-         │ │ Load       │ │
          │ │ Validate   │ │
          │ │ Transform  │ │
          │ │ Merge      │ │
@@ -33,11 +77,12 @@ The system follows a modular pipeline architecture with clear separation of conc
          └───────┬────────┘
                  │
          ┌───────▼────────┐
-         │ Output Files   │
-         │ - Merged CSV   │
-         │ - Analytics    │
-         │ - Reports      │
-         └───────┬────────┘
+         │ Dashboard      │
+         │ - Live Status  │
+         │ - Auto-refresh │
+         │ - Data Source  │
+         │   Badges       │
+         └────────────────┘
                  │
          ┌───────▼────────┐
          │ Streamlit      │

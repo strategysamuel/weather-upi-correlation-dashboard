@@ -12,6 +12,13 @@ import time
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 import logging
+import sys
+from pathlib import Path
+import streamlit as st
+
+# Add project root to path for config import
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -21,6 +28,10 @@ class PipelineError(Exception):
     """Custom exception for pipeline errors"""
     pass
 
+class FallbackPending(Exception):
+    """Exception indicating fallback is pending user approval"""
+    pass
+
 # Mumbai coordinates
 MUMBAI_LAT = 19.07
 MUMBAI_LON = 72.88
@@ -28,57 +39,125 @@ MUMBAI_LON = 72.88
 class WeatherAPIClient:
     """MCP client for fetching weather data from Open-Meteo API"""
     
-    def __init__(self, fallback_csv_path: str = "weather_mumbai_2024_11_synthetic.csv"):
+    def __init__(self, fallback_csv_path: str = None):
         self.archive_url = "https://archive-api.open-meteo.com/v1/archive"
         self.forecast_url = "https://api.open-meteo.com/v1/forecast"
-        self.fallback_csv_path = fallback_csv_path
+        self.fallback_csv_path = fallback_csv_path or str(config.WEATHER_DATA_FILE)
+        self.max_retries = config.LIVE_FETCH_RETRY_COUNT
+        self.retry_delay = config.LIVE_FETCH_RETRY_DELAY_SEC
         
     def fetch_weather_data(self, start_date: str = None, end_date: str = None, 
-                          use_csv_fallback: bool = False, interactive: bool = False) -> pd.DataFrame:
+                          use_csv_fallback: bool = None, interactive: bool = None) -> pd.DataFrame:
         """
-        Fetch weather data from Open-Meteo API with controlled fallback to local CSV
+        Fetch weather data with live-first approach and controlled fallback
         
         Args:
             start_date: Start date in YYYY-MM-DD format
             end_date: End date in YYYY-MM-DD format
-            use_csv_fallback: Whether to allow automatic CSV fallback
-            interactive: Whether to prompt user for approval on API failure
+            use_csv_fallback: Override for ALLOW_CSV_FALLBACK config
+            interactive: Override for INTERACTIVE_FALLBACK_PROMPT config
             
         Returns:
-            DataFrame with weather data
+            DataFrame with weather data and source information
             
         Raises:
-            PipelineError: If API fails and fallback is not approved
+            PipelineError: If API fails and fallback is not allowed
+            FallbackPending: If API fails and interactive approval is needed
         """
-        try:
-            # Set default date range if not provided
-            if not start_date or not end_date:
-                end_date = datetime.now().strftime("%Y-%m-%d")
-                start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
-            
-            logger.info("Attempting Live Weather API...")
-            logger.info(f"Fetching weather data from API for dates {start_date} to {end_date}")
-            
-            # Try archive endpoint first for historical data
-            api_data = self._call_archive_api_with_retry(start_date, end_date)
-            if api_data is not None:
-                logger.info("Live API succeeded")
-                return self._parse_weather_response(api_data)
-            
-            # Try forecast endpoint as secondary attempt
-            logger.info("Archive API failed, trying forecast endpoint")
-            api_data = self._call_forecast_api_with_retry(start_date, end_date)
-            if api_data is not None:
-                logger.info("Live API succeeded")
-                return self._parse_weather_response(api_data)
-            
-            # Both API endpoints failed
-            logger.error("Live API failed with multiple endpoint failures")
-            return self._handle_api_failure(use_csv_fallback, interactive)
+        # Set default date range if not provided
+        if not start_date or not end_date:
+            end_date = datetime.now().strftime("%Y-%m-%d")
+            start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+        
+        # Use config defaults if not overridden
+        if use_csv_fallback is None:
+            use_csv_fallback = config.ALLOW_CSV_FALLBACK
+        if interactive is None:
+            interactive = config.INTERACTIVE_FALLBACK_PROMPT
+        
+        # If live weather is disabled, go straight to CSV
+        if not config.USE_LIVE_WEATHER:
+            logger.info("Live weather disabled in config, using CSV fallback")
+            return self._load_csv_fallback()
+        
+        # Attempt live API fetch with retries
+        logger.info("Attempting Live Weather API...")
+        logger.info(f"Fetching weather data from API for dates {start_date} to {end_date}")
+        
+        for attempt in range(config.LIVE_FETCH_RETRY_COUNT):
+            try:
+                # Try archive endpoint first
+                api_data = self._call_archive_api_with_retry(start_date, end_date)
+                if api_data is not None:
+                    logger.info("Live API succeeded")
+                    df = self._parse_weather_response(api_data)
+                    # Mark as API data
+                    df['condition'] = 'API_Data'
+                    df['source'] = 'api'
+                    return df
                 
-        except Exception as e:
-            logger.error(f"Live API failed with exception: {e}")
-            return self._handle_api_failure(use_csv_fallback, interactive)
+                # Try forecast endpoint as backup
+                logger.info("Archive API failed, trying forecast endpoint")
+                api_data = self._call_forecast_api_with_retry(start_date, end_date)
+                if api_data is not None:
+                    logger.info("Live API succeeded")
+                    df = self._parse_weather_response(api_data)
+                    # Mark as API data
+                    df['condition'] = 'API_Data'
+                    df['source'] = 'api'
+                    return df
+                
+                # Both endpoints failed, retry if attempts remaining
+                if attempt < config.LIVE_FETCH_RETRY_COUNT - 1:
+                    logger.warning(f"Live API attempt {attempt + 1} failed, retrying in {config.LIVE_FETCH_RETRY_DELAY_SEC}s...")
+                    time.sleep(config.LIVE_FETCH_RETRY_DELAY_SEC)
+                else:
+                    logger.error(f"Live API failed after {config.LIVE_FETCH_RETRY_COUNT} attempts")
+                    break
+                    
+            except Exception as e:
+                logger.error(f"Live API attempt {attempt + 1} failed with exception: {e}")
+                if attempt < config.LIVE_FETCH_RETRY_COUNT - 1:
+                    logger.warning(f"Retrying in {config.LIVE_FETCH_RETRY_DELAY_SEC}s...")
+                    time.sleep(config.LIVE_FETCH_RETRY_DELAY_SEC)
+                else:
+                    logger.error(f"Live API failed after {config.LIVE_FETCH_RETRY_COUNT} attempts")
+                    break
+        
+        # All API attempts failed, handle fallback
+        return self._handle_api_failure(use_csv_fallback, interactive)
+    
+    def _handle_api_failure(self, use_csv_fallback: bool, interactive: bool) -> pd.DataFrame:
+        """
+        Handle API failure with user approval logic
+        
+        Args:
+            use_csv_fallback: Whether to allow automatic CSV fallback
+            interactive: Whether to prompt user for approval
+            
+        Returns:
+            DataFrame with weather data from CSV
+            
+        Raises:
+            PipelineError: If fallback is not approved
+            FallbackPending: If interactive approval is needed
+        """
+        if not use_csv_fallback:
+            # Strict mode - no fallback allowed
+            logger.error("Live API failed and CSV fallback is disabled (strict mode)")
+            raise PipelineError("Live API failed and CSV fallback is disabled")
+        
+        if interactive:
+            # Interactive mode - raise FallbackPending for UI to handle
+            logger.warning("Live API failed, interactive fallback approval required")
+            raise FallbackPending("Live API failed, user approval required for CSV fallback")
+        
+        else:
+            # Silent fallback allowed
+            logger.warning("Live API failed, using automatic CSV fallback")
+            return self._load_csv_fallback()
+    
+
     
     def _handle_api_failure(self, use_csv_fallback: bool, interactive: bool) -> pd.DataFrame:
         """
@@ -94,29 +173,20 @@ class WeatherAPIClient:
         Raises:
             PipelineError: If fallback is not approved
         """
-        if interactive:
-            # Request user approval
-            try:
-                response = input("Live API failed. Do you want to use fallback CSV weather data? (yes/no): ").strip().lower()
-                if response in ['yes', 'y']:
-                    logger.info("Using fallback CSV after user approval")
-                    return self._fallback_to_csv()
-                else:
-                    logger.error("Pipeline stopped because fallback was not approved")
-                    raise PipelineError("Live API failed and fallback was not approved by user")
-            except (EOFError, KeyboardInterrupt):
-                logger.error("User input interrupted, stopping pipeline")
-                raise PipelineError("Live API failed and user input was interrupted")
+        if not use_csv_fallback:
+            # Strict mode - no fallback allowed
+            logger.error("Live API failed and CSV fallback is disabled (strict mode)")
+            raise PipelineError("Live API failed and CSV fallback is disabled")
         
-        elif use_csv_fallback:
-            # Silent fallback allowed
-            logger.warning("Using fallback CSV (automatic fallback enabled)")
-            return self._fallback_to_csv()
+        if interactive:
+            # Interactive mode - raise FallbackPending for UI to handle
+            logger.warning("Live API failed, interactive fallback approval required")
+            raise FallbackPending("Live API failed, user approval required for CSV fallback")
         
         else:
-            # No fallback allowed
-            logger.error("Live API failed and fallback not approved")
-            raise PipelineError("Live API failed and fallback not approved")
+            # Silent fallback allowed
+            logger.warning("Live API failed, using automatic CSV fallback")
+            return self._load_csv_fallback()
     
     def _call_archive_api_with_retry(self, start_date: str, end_date: str) -> Optional[Dict[Any, Any]]:
         """
@@ -182,8 +252,8 @@ class WeatherAPIClient:
         Returns:
             JSON response data or None if failed
         """
-        max_retries = 3
-        backoff_delays = [1, 2, 4]  # Exponential backoff: 1s, 2s, 4s
+        max_retries = self.max_retries
+        backoff_delays = [self.retry_delay * (2**i) for i in range(max_retries)]  # Exponential backoff
         
         for attempt in range(max_retries):
             try:
@@ -317,30 +387,292 @@ class WeatherAPIClient:
             logger.info(f"Loading fallback weather data from {self.fallback_csv_path}")
             df = pd.read_csv(self.fallback_csv_path)
             df['date'] = pd.to_datetime(df['date'])
+            
+            # Add condition column if not present
+            if 'condition' not in df.columns:
+                df['condition'] = df['rain_mm'].apply(lambda x: 'Rain' if x > 0 else 'Clear')
+            
+            # Mark as CSV fallback
+            df['condition'] = 'CSV_Fallback'
+            df['source'] = 'csv'
+            
             logger.info(f"Loaded {len(df)} weather records from CSV fallback")
             return df
             
         except Exception as e:
             logger.error(f"Error loading fallback CSV: {e}")
             # Return empty DataFrame with correct schema if CSV also fails
-            return pd.DataFrame(columns=['date', 'city', 'avg_temp_c', 'humidity_pct', 'rain_mm', 'condition'])
+            return pd.DataFrame(columns=['date', 'city', 'avg_temp_c', 'humidity_pct', 'rain_mm', 'condition', 'source'])
+    
+    def _load_csv_fallback(self) -> pd.DataFrame:
+        """
+        Load weather data from CSV fallback file
+        
+        Returns:
+            DataFrame with weather data marked as CSV fallback
+        """
+        try:
+            logger.info(f"Loading CSV fallback from {config.WEATHER_DATA_FILE}")
+            df = pd.read_csv(config.WEATHER_DATA_FILE)
+            
+            # Ensure required columns exist
+            required_columns = ['date', 'city', 'avg_temp_c', 'humidity_pct', 'rain_mm']
+            for col in required_columns:
+                if col not in df.columns:
+                    raise ValueError(f"Required column '{col}' not found in CSV fallback")
+            
+            # Add condition column if not present
+            if 'condition' not in df.columns:
+                df['condition'] = df['rain_mm'].apply(lambda x: 'Rain' if x > 0 else 'Clear')
+            
+            # Mark as CSV fallback
+            df['condition'] = 'CSV_Fallback'
+            df['source'] = 'csv'
+            
+            logger.info(f"Successfully loaded {len(df)} records from CSV fallback")
+            return df
+            
+        except Exception as e:
+            logger.error(f"Failed to load CSV fallback: {e}")
+            raise PipelineError(f"Both live API and CSV fallback failed: {e}")
+    
+    def request_csv_fallback(self) -> pd.DataFrame:
+        """
+        Streamlit-compatible function to request CSV fallback after user approval
+        
+        Returns:
+            DataFrame with weather data from CSV
+        """
+        logger.info("User approved CSV fallback")
+        return self._load_csv_fallback()
 
 def get_weather_data(start_date: str = None, end_date: str = None, 
-                    use_csv_fallback: bool = False, interactive: bool = False) -> pd.DataFrame:
+                    use_csv_fallback: bool = None, interactive: bool = None) -> pd.DataFrame:
     """
-    Convenience function to fetch weather data with controlled fallback
+    Convenience function to fetch weather data with live-first approach
     
     Args:
         start_date: Start date in YYYY-MM-DD format
         end_date: End date in YYYY-MM-DD format
-        use_csv_fallback: Whether to allow automatic CSV fallback
-        interactive: Whether to prompt user for approval on API failure
+        use_csv_fallback: Override for ALLOW_CSV_FALLBACK config
+        interactive: Override for INTERACTIVE_FALLBACK_PROMPT config
         
     Returns:
-        Weather DataFrame
+        Weather DataFrame with source information
         
     Raises:
         PipelineError: If API fails and fallback is not approved
+        FallbackPending: If API fails and interactive approval is needed
     """
     client = WeatherAPIClient()
     return client.fetch_weather_data(start_date, end_date, use_csv_fallback, interactive)
+def request_csv_fallback(start_date: str = None, end_date: str = None) -> pd.DataFrame:
+    """
+    Request CSV fallback after user approval (Streamlit-compatible)
+    
+    Args:
+        start_date: Start date in YYYY-MM-DD format (unused for CSV)
+        end_date: End date in YYYY-MM-DD format (unused for CSV)
+        
+    Returns:
+        Weather DataFrame from CSV fallback
+    """
+    client = WeatherAPIClient()
+    return client.request_csv_fallback()
+
+# Cached weather data fetching function
+@st.cache_data(ttl=3600)  # Cache for 1 hour
+def cached_fetch_weather(lat: float, lon: float, start_date: str, end_date: str) -> Optional[Dict[Any, Any]]:
+    """
+    Cached weather data fetching with 1-hour TTL
+    
+    Args:
+        lat: Latitude
+        lon: Longitude  
+        start_date: Start date in YYYY-MM-DD format
+        end_date: End date in YYYY-MM-DD format
+        
+    Returns:
+        JSON response data or None if failed
+    """
+    logger.info(f"Cache miss - fetching weather data for {start_date} to {end_date}")
+    client = WeatherAPIClient()
+    return client._call_archive_api_with_retry(start_date, end_date)
+
+def fetch_and_store_weather(lat: float, lon: float, start_date: str, end_date: str, 
+                           try_live: bool = True, auto_fallback: bool = False) -> bool:
+    """
+    Fetch weather data and store in session state
+    
+    Args:
+        lat: Latitude
+        lon: Longitude
+        start_date: Start date in YYYY-MM-DD format
+        end_date: End date in YYYY-MM-DD format
+        try_live: Whether to attempt live API first
+        auto_fallback: Whether to automatically fallback to CSV
+        
+    Returns:
+        True if data was successfully stored, False if API failed and auto_fallback=False
+    """
+    logger.info(f"Fetch starts: lat={lat}, lon={lon}, start={start_date}, end={end_date}, live={try_live}")
+    
+    if not try_live:
+        # Skip live API, go straight to CSV
+        logger.info("Live API disabled, loading CSV fallback")
+        try:
+            client = WeatherAPIClient()
+            df = client._load_csv_fallback()
+            
+            # Store in session state
+            st.session_state["weather_df"] = df
+            st.session_state["weather_source"] = "csv"
+            
+            logger.info(f"CSV fallback loaded: {len(df)} records")
+            return True
+        except Exception as e:
+            logger.error(f"CSV fallback failed: {e}")
+            return False
+    
+    # Try live API first
+    try:
+        # Use cached fetch
+        api_data = cached_fetch_weather(lat, lon, start_date, end_date)
+        
+        if api_data is not None:
+            # Parse API response
+            client = WeatherAPIClient()
+            df = client._parse_weather_response(api_data)
+            df['source'] = 'api'
+            df['condition'] = 'API_Data'
+            
+            # Store in session state
+            st.session_state["weather_df"] = df
+            st.session_state["weather_source"] = "api"
+            
+            logger.info(f"Live API success: {len(df)} records loaded")
+            return True
+        else:
+            logger.warning("Live API failed")
+            
+    except Exception as e:
+        logger.error(f"Live API exception: {e}")
+    
+    # API failed - handle fallback
+    if auto_fallback:
+        logger.info("Auto fallback enabled, loading CSV")
+        try:
+            client = WeatherAPIClient()
+            df = client._load_csv_fallback()
+            
+            # Store in session state
+            st.session_state["weather_df"] = df
+            st.session_state["weather_source"] = "csv"
+            
+            logger.info(f"Auto fallback success: {len(df)} records loaded")
+            return True
+        except Exception as e:
+            logger.error(f"CSV fallback failed: {e}")
+            return False
+    else:
+        # Interactive fallback required
+        logger.info("API failed, interactive fallback required")
+        return False
+# Cached weather data fetching function
+@st.cache_data(ttl=3600)  # Cache for 1 hour
+def cached_fetch_weather(lat: float, lon: float, start_date: str, end_date: str) -> Optional[Dict[Any, Any]]:
+    """
+    Cached weather data fetching with 1-hour TTL
+    
+    Args:
+        lat: Latitude
+        lon: Longitude  
+        start_date: Start date in YYYY-MM-DD format
+        end_date: End date in YYYY-MM-DD format
+        
+    Returns:
+        JSON response data or None if failed
+    """
+    logger.info(f"Cache miss - fetching weather data for {start_date} to {end_date}")
+    client = WeatherAPIClient()
+    return client._call_archive_api_with_retry(start_date, end_date)
+
+def fetch_and_store_weather(lat: float, lon: float, start_date: str, end_date: str, 
+                           try_live: bool = True, auto_fallback: bool = False) -> bool:
+    """
+    Fetch weather data and store in session state
+    
+    Args:
+        lat: Latitude
+        lon: Longitude
+        start_date: Start date in YYYY-MM-DD format
+        end_date: End date in YYYY-MM-DD format
+        try_live: Whether to attempt live API first
+        auto_fallback: Whether to automatically fallback to CSV
+        
+    Returns:
+        True if data was successfully stored, False if API failed and auto_fallback=False
+    """
+    logger.info(f"Fetch starts: lat={lat}, lon={lon}, start={start_date}, end={end_date}, live={try_live}")
+    
+    if not try_live:
+        # Skip live API, go straight to CSV
+        logger.info("Live API disabled, loading CSV fallback")
+        try:
+            client = WeatherAPIClient()
+            df = client._load_csv_fallback()
+            
+            # Store in session state
+            st.session_state["weather_df"] = df
+            st.session_state["weather_source"] = "csv"
+            
+            logger.info(f"CSV fallback loaded: {len(df)} records")
+            return True
+        except Exception as e:
+            logger.error(f"CSV fallback failed: {e}")
+            return False
+    
+    # Try live API first
+    try:
+        # Use cached fetch
+        api_data = cached_fetch_weather(lat, lon, start_date, end_date)
+        
+        if api_data is not None:
+            # Parse API response
+            client = WeatherAPIClient()
+            df = client._parse_weather_response(api_data)
+            df['source'] = 'api'
+            df['condition'] = 'API_Data'
+            
+            # Store in session state
+            st.session_state["weather_df"] = df
+            st.session_state["weather_source"] = "api"
+            
+            logger.info(f"Live API success: {len(df)} records loaded")
+            return True
+        else:
+            logger.warning("Live API failed")
+            
+    except Exception as e:
+        logger.error(f"Live API exception: {e}")
+    
+    # API failed - handle fallback
+    if auto_fallback:
+        logger.info("Auto fallback enabled, loading CSV")
+        try:
+            client = WeatherAPIClient()
+            df = client._load_csv_fallback()
+            
+            # Store in session state
+            st.session_state["weather_df"] = df
+            st.session_state["weather_source"] = "csv"
+            
+            logger.info(f"Auto fallback success: {len(df)} records loaded")
+            return True
+        except Exception as e:
+            logger.error(f"CSV fallback failed: {e}")
+            return False
+    else:
+        # Interactive fallback required
+        logger.info("API failed, interactive fallback required")
+        return False

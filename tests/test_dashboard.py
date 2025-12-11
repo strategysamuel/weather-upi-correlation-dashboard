@@ -425,3 +425,170 @@ class TestLiveFetchFunctionality:
             assert status == "Unknown"
         finally:
             config.MERGED_DATA_FILE = original_path
+class TestLiveFirstDashboard:
+    """Test class for live-first dashboard functionality"""
+    
+    def setup_method(self):
+        """Set up test fixtures"""
+        self.dashboard = WeatherUPIDashboard()
+        # Skip Streamlit page config to avoid issues in testing
+        self.dashboard.setup_page_config = lambda: None
+    
+    def test_default_date_range(self):
+        """Test that default date range is last 30 days"""
+        start_date, end_date = self.dashboard.get_default_date_range()
+        
+        # Should be 30 days apart
+        assert (end_date - start_date).days == 30
+        
+        # End date should be today
+        from datetime import date
+        assert end_date == date.today()
+    
+    def test_date_range_validation(self):
+        """Test date range validation"""
+        from datetime import date, timedelta
+        
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        future_date = today + timedelta(days=1)
+        long_ago = today - timedelta(days=100)
+        
+        # Valid range should return None
+        assert self.dashboard.validate_date_range(yesterday, today) is None
+        
+        # Future dates should return error
+        error = self.dashboard.validate_date_range(future_date, future_date)
+        assert "Future dates are not allowed" in error
+        
+        # End before start should return error
+        error = self.dashboard.validate_date_range(today, yesterday)
+        assert "End date must be after start date" in error
+        
+        # Range > 90 days should return error
+        error = self.dashboard.validate_date_range(long_ago, today)
+        assert "Date range cannot exceed 90 days" in error
+    
+    def test_fetch_and_store_weather_api_success(self):
+        """Test successful API fetch stores source='api'"""
+        from unittest.mock import patch, Mock
+        import streamlit as st
+        
+        # Initialize session state
+        if not hasattr(st, 'session_state'):
+            st.session_state = {}
+        
+        with patch('src.dashboard.cached_fetch_weather') as mock_cached_fetch:
+            # Mock successful API response
+            mock_cached_fetch.return_value = {
+                'daily': {
+                    'time': ['2024-11-01', '2024-11-02'],
+                    'temperature_2m_max': [30.0, 31.0],
+                    'temperature_2m_min': [20.0, 21.0],
+                    'rain_sum': [0.0, 5.0]
+                }
+            }
+            
+            # Test API success
+            success = self.dashboard.fetch_and_store_weather(
+                19.07, 72.88, "2024-11-01", "2024-11-02", try_live=True, auto_fallback=False
+            )
+            
+            assert success is True
+            assert st.session_state.get("weather_source") == "api"
+            assert st.session_state.get("weather_df") is not None
+    
+    def test_fetch_and_store_weather_api_fail_interactive(self):
+        """Test API failure with interactive fallback returns False"""
+        from unittest.mock import patch
+        import streamlit as st
+        
+        # Initialize session state
+        if not hasattr(st, 'session_state'):
+            st.session_state = {}
+        
+        # Clear Streamlit cache to ensure mocking works
+        st.cache_data.clear()
+        
+        with patch('src.weather_api.WeatherAPIClient._call_archive_api_with_retry') as mock_api_call:
+            # Mock API failure
+            mock_api_call.return_value = None
+            
+            # Test API failure with interactive fallback
+            success = self.dashboard.fetch_and_store_weather(
+                19.07, 72.88, "2024-11-01", "2024-11-02", try_live=True, auto_fallback=False
+            )
+            
+            assert success is False
+            # Should not store weather data when interactive fallback needed
+            assert st.session_state.get("weather_df") is None
+    
+    def test_fetch_and_store_weather_api_fail_auto_fallback(self):
+        """Test API failure with auto fallback loads CSV and sets source='csv'"""
+        from unittest.mock import patch, Mock
+        import streamlit as st
+        
+        # Initialize session state
+        if not hasattr(st, 'session_state'):
+            st.session_state = {}
+        
+        # Clear Streamlit cache to ensure mocking works
+        st.cache_data.clear()
+        
+        with patch('src.weather_api.WeatherAPIClient._call_archive_api_with_retry') as mock_api_call, \
+             patch('src.weather_api.request_csv_fallback') as mock_csv_fallback:
+            
+            # Mock API failure
+            mock_api_call.return_value = None
+            
+            # Mock CSV fallback success
+            mock_df = pd.DataFrame({
+                'date': pd.to_datetime(['2024-11-01', '2024-11-02']),
+                'city': ['Mumbai', 'Mumbai'],
+                'avg_temp_c': [25.0, 26.0],
+                'humidity_pct': [60.0, 65.0],
+                'rain_mm': [0.0, 2.0],
+                'condition': ['CSV_Fallback', 'CSV_Fallback'],
+                'source': ['csv', 'csv']
+            })
+            mock_csv_fallback.return_value = mock_df
+            
+            # Test API failure with auto fallback
+            success = self.dashboard.fetch_and_store_weather(
+                19.07, 72.88, "2024-11-01", "2024-11-02", try_live=True, auto_fallback=True
+            )
+            
+            assert success is True
+            assert st.session_state.get("weather_source") == "csv"
+            assert st.session_state.get("weather_df") is not None
+    
+    def test_csv_only_mode(self):
+        """Test CSV-only mode (try_live=False)"""
+        from unittest.mock import patch, Mock
+        import streamlit as st
+        
+        # Initialize session state
+        if not hasattr(st, 'session_state'):
+            st.session_state = {}
+        
+        with patch('src.weather_api.request_csv_fallback') as mock_csv_fallback:
+            # Mock CSV fallback success
+            mock_df = pd.DataFrame({
+                'date': pd.to_datetime(['2024-11-01', '2024-11-02']),
+                'city': ['Mumbai', 'Mumbai'],
+                'avg_temp_c': [25.0, 26.0],
+                'humidity_pct': [60.0, 65.0],
+                'rain_mm': [0.0, 2.0],
+                'condition': ['CSV_Fallback', 'CSV_Fallback'],
+                'source': ['csv', 'csv']
+            })
+            mock_csv_fallback.return_value = mock_df
+            
+            # Test CSV-only mode
+            success = self.dashboard.fetch_and_store_weather(
+                19.07, 72.88, "2024-11-01", "2024-11-02", try_live=False, auto_fallback=False
+            )
+            
+            assert success is True
+            assert st.session_state.get("weather_source") == "csv"
+            assert st.session_state.get("weather_df") is not None

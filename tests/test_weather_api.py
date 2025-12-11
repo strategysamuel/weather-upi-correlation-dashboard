@@ -11,7 +11,11 @@ import json
 import requests
 from datetime import datetime, timedelta
 
-from src.weather_api import WeatherAPIClient, get_weather_data
+from src.weather_api import WeatherAPIClient, get_weather_data, request_csv_fallback, PipelineError, FallbackPending
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
 
 class TestWeatherAPIProperties:
     """Property-based tests for weather API functionality"""
@@ -439,3 +443,107 @@ class TestMCPIntegration:
             for key, value in expected_params.items():
                 assert key in params, f"Missing parameter: {key}"
                 assert params[key] == value, f"Parameter {key} has incorrect value: {params[key]} != {value}"
+
+
+class TestLiveFirstBehavior:
+    """Test class for live-first weather API behavior"""
+    
+    def setup_method(self):
+        """Set up test fixtures"""
+        self.client = WeatherAPIClient()
+        # Store original config values
+        self.original_use_live = config.USE_LIVE_WEATHER
+        self.original_allow_fallback = config.ALLOW_CSV_FALLBACK
+        self.original_interactive = config.INTERACTIVE_FALLBACK_PROMPT
+    
+    def teardown_method(self):
+        """Restore original config values"""
+        config.USE_LIVE_WEATHER = self.original_use_live
+        config.ALLOW_CSV_FALLBACK = self.original_allow_fallback
+        config.INTERACTIVE_FALLBACK_PROMPT = self.original_interactive
+    
+    def test_live_first_success(self):
+        """Test successful live API fetch"""
+        config.USE_LIVE_WEATHER = True
+        
+        with patch('requests.get') as mock_get:
+            # Mock successful API response
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {
+                'daily': {
+                    'time': ['2024-11-01', '2024-11-02'],
+                    'temperature_2m_max': [30.0, 31.0],
+                    'temperature_2m_min': [20.0, 21.0],
+                    'rain_sum': [0.0, 5.0]
+                }
+            }
+            mock_get.return_value = mock_response
+            
+            df = self.client.fetch_weather_data()
+            
+            # Verify API data markers
+            assert 'source' in df.columns
+            assert df['source'].iloc[0] == 'api'
+            assert 'condition' in df.columns
+            assert df['condition'].iloc[0] == 'API_Data'
+    
+    def test_live_disabled_uses_csv(self):
+        """Test that disabling live weather uses CSV directly"""
+        config.USE_LIVE_WEATHER = False
+        
+        df = self.client.fetch_weather_data()
+        
+        # Should use CSV without trying API
+        assert 'source' in df.columns
+        assert df['source'].iloc[0] == 'csv'
+        assert df['condition'].iloc[0] == 'CSV_Fallback'
+    
+    def test_strict_mode_no_fallback(self):
+        """Test strict mode raises error when API fails"""
+        config.USE_LIVE_WEATHER = True
+        config.ALLOW_CSV_FALLBACK = False
+        
+        with patch('requests.get') as mock_get:
+            mock_get.side_effect = Exception("API unavailable")
+            
+            with pytest.raises(PipelineError, match="CSV fallback is disabled"):
+                self.client.fetch_weather_data()
+    
+    def test_interactive_fallback_pending(self):
+        """Test interactive mode raises FallbackPending"""
+        config.USE_LIVE_WEATHER = True
+        config.ALLOW_CSV_FALLBACK = True
+        config.INTERACTIVE_FALLBACK_PROMPT = True
+        
+        with patch('requests.get') as mock_get:
+            mock_get.side_effect = Exception("API unavailable")
+            
+            with pytest.raises(FallbackPending, match="user approval required"):
+                self.client.fetch_weather_data()
+    
+    def test_silent_fallback(self):
+        """Test silent fallback when API fails"""
+        config.USE_LIVE_WEATHER = True
+        config.ALLOW_CSV_FALLBACK = True
+        config.INTERACTIVE_FALLBACK_PROMPT = False
+        
+        with patch('requests.get') as mock_get:
+            mock_get.side_effect = Exception("API unavailable")
+            
+            df = self.client.fetch_weather_data()
+            
+            # Should use CSV fallback
+            assert 'source' in df.columns
+            assert df['source'].iloc[0] == 'csv'
+            assert df['condition'].iloc[0] == 'CSV_Fallback'
+    
+    def test_request_csv_fallback_function(self):
+        """Test the request_csv_fallback function"""
+        df = request_csv_fallback()
+        
+        # Verify CSV fallback markers
+        assert 'source' in df.columns
+        assert df['source'].iloc[0] == 'csv'
+        assert df['condition'].iloc[0] == 'CSV_Fallback'
+        assert not df.empty
