@@ -146,8 +146,8 @@ class TestWeatherAPIProperties:
         with patch('requests.get') as mock_get:
             mock_get.side_effect = Exception("API unavailable")
             
-            # Should fallback to CSV without raising exception
-            df = self.client.fetch_weather_data()
+            # Should fallback to CSV without raising exception when use_csv_fallback=True
+            df = self.client.fetch_weather_data(use_csv_fallback=True)
             
             # Verify fallback data has correct structure
             required_columns = ['date', 'city', 'avg_temp_c', 'humidity_pct', 'rain_mm', 'condition']
@@ -270,7 +270,7 @@ class TestMCPIntegration:
             mock_get.side_effect = Exception("API unavailable")
             
             # get_weather_data should fallback to CSV
-            df = get_weather_data("2024-11-01", "2024-11-30")
+            df = get_weather_data("2024-11-01", "2024-11-30", use_csv_fallback=True)
             
             # Verify fallback data structure
             assert not df.empty, "Fallback should provide data"
@@ -363,7 +363,7 @@ class TestMCPIntegration:
             assert result is None, "Rate limited requests should return None"
             
             # Should fallback to CSV data
-            df = get_weather_data("2024-11-01", "2024-11-30")
+            df = get_weather_data("2024-11-01", "2024-11-30", use_csv_fallback=True)
             assert not df.empty, "Should fallback to CSV when rate limited"
         
         # Test malformed JSON responses
@@ -394,7 +394,7 @@ class TestMCPIntegration:
             assert result is None, "Timeout should return None"
             
             # Should fallback to CSV
-            df = get_weather_data("2024-11-01", "2024-11-30")
+            df = get_weather_data("2024-11-01", "2024-11-30", use_csv_fallback=True)
             assert not df.empty, "Should fallback to CSV on timeout"
     
     def test_api_parameter_validation(self):

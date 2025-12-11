@@ -158,7 +158,7 @@ class WeatherUPIPipeline:
         
         try:
             # Fetch weather data for November 2024 to match UPI data
-            weather_df = get_weather_data(start_date="2024-11-01", end_date="2024-11-30")
+            weather_df = get_weather_data(start_date="2024-11-01", end_date="2024-11-30", use_csv_fallback=True)
             
             if weather_df.empty:
                 raise ValueError("No weather data retrieved from API or fallback CSV")
