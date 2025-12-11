@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tools\docstring.py
+# hypothesis_version: 6.148.5
+
+['   :{}: {}', ' : ', '%s', '(', '(?P<allfuncs>', '(?P<trailing>[,\\.])?', ')', ')*)', '*', ',', ', ', '-', '..', '.. index::', '.. index:: %s', ':', ':(?P<role>\\w+):', '::', '=', 'Attributes', 'Examples', 'Extended Summary', 'Methods', 'Notes', 'Other Parameters', 'Parameter', 'Parameters', 'Raises', 'Receives', 'References', 'Returns', 'See Also', 'Signature', 'Summary', 'Unknown section %s', 'Warnings', 'Warns', 'Yields', '\\*', '\\s*', '^\\s*', '_obj', 'allfuncs', 'default', 'desc', 'index', 'name', 'name2', 'namenext', 'role', 'rolenext', 'trailing', 'type', '|']

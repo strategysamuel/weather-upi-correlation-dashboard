@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\statespace\exponential_smoothing.py
+# hypothesis_version: 6.148.5
+
+[0.0, 0.0001, 0.001, 0.01, 0.05, 0.1, 0.5, 0.8, 0.98, 1.0, ')', ', ', 'A', 'Ad', 'ETS(', 'N', 'add', 'bounds', 'concentrate_scale', 'concentrated', 'conserve_memory', 'damped_trend', 'damping_trend', 'dates', 'design', 'error', 'estimated', 'fit', 'freq', 'heuristic', 'initial_level', 'initial_seasonal', 'initial_seasonal.L%d', 'initial_trend', 'known', 'level', 'seasonal', 'seasonal.L%d', 'selection', 'sigma2', 'simple', 'smoothing_level', 'smoothing_seasonal', 'smoothing_trend', 'state_cov', 'transition', 'trend']

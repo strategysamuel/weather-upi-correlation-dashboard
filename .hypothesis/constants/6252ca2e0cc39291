@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\discrete\truncated_model.py
+# hypothesis_version: 6.148.5
+
+[0.0001, 0.01, 0.03, 'HurdleCountModel', 'TruncatedLFPoisson', 'auto', 'bfgs', 'converged', 'defined_by_method', 'exposure', 'extra_attr', 'extra_params', 'ignore', 'k_extra', 'l1', 'l1_cvxopt_cp', 'linear', 'mean', 'mean-main', 'mean-nonzero', 'need covariance', 'negbin', 'none', 'nonrobust', 'offset', 'one_line_description', 'params', 'poisson', 'prob', 'prob-base', 'prob-main', 'prob-trunc', 'prob-zero', 'truncation', 'var', 'zm_']

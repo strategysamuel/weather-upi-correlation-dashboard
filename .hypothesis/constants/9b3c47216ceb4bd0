@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\genmod\bayes_mixed_glm.py
+# hypothesis_version: 6.148.5
+
+[-0.9739065285171717, -0.8650633666889845, -0.6794095682990244, -0.5, -0.4333953941292472, -0.1488743389816312, 0.0, 1e-08, 0.0666713443086881, 0.1, 0.1488743389816312, 0.1494513491505806, 0.219086362515982, 0.2692667193099963, 0.2955242247147529, 0.4333953941292472, 0.5, 0.6794095682990244, 0.8650633666889845, 0.9739065285171717, ' Mixed GLM Results', '%.3f', 'BFGS', 'FE_%d', 'M', 'Mean', 'Post. Mean', 'Post. SD', 'SD', 'SD (LB)', 'SD (UB)', 'Type', 'V', 'VC_%d', 'columns', 'dataframe', 'frame', '|G|=%f']

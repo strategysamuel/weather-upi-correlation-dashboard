@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\proportion.py
+# hypothesis_version: 6.148.5
+
+[0.0, 1e-10, 0.05, 0.25, 0.5, 0.99999, 1.0, 1.5, 2.0, 4.0, '2s', 'agr', 'agresti-caffo', 'agresti_coull', 'beta', 'binom', 'binom_test', 'binomtest', 'count', 'counts must be >= 0', 'diff', 'goodman', 'hs', 'jeff', 'l', 'larger', 'limits', 'log', 'log-adjusted', 'logit', 'logit-adjusted', 'logit-smoothed', 'newcomb', 'nobs', 'norm', 'normal', 'null', 'odds-ratio', 'or', 'problem with signs', 'ratio', 's', 'sample', 'score', 'sison', 'smaller', 'two-sided', 'unsafe', 'wald', 'wilson']

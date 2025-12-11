@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\multivariate\factor_rotation\_wrappers.py
+# hypothesis_version: 6.148.5
+
+[0.5, 'CF', 'Invalid method', 'algorithm', 'analytic', 'biquartimax', 'biquartimin', 'equamax', 'gpa', 'gpa_der_free', 'oblimin', 'oblique', 'orthogonal', 'orthomax', 'parsimax', 'parsimony', 'partial_target', 'quartimax', 'quartimin', 'rotation_method', 'target', 'varimax']

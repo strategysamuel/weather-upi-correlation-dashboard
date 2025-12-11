@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tools\linalg.py
+# hypothesis_version: 6.148.5
+
+[1e-15, 'logdet_symm', 'm is not symmetric.', 'matrix_sqrt', 'stationary_solve', 'transf_constraints']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\robust_compare.py
+# hypothesis_version: 6.148.5
+
+[0.2, 'Proportion too big.', 'abs', 'identity', 'mean', 'median', 'square', 'trimmed', 'two-sided', 'winsorized']

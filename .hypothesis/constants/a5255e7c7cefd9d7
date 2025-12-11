@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\vector_ar\vecm.py
+# hypothesis_version: 6.148.5
+
+[0.01, 0.05, 0.1, ' significance level', '%#0.4g', '%d', '%d.%s', '%s', '.', '</td>', '<td>', 'F', 'L%d.%s.%s', 'beta.%d.', 'ci', 'co', 'const.', 'const.%s', 'critical value', 'data_aligns', 'data_fmts', 'det_string', 'deterministic', 'ec', 'exog%d.%s', 'exog_coint%d.%s', 'f', 'granger', 'johansen', 'li', 'lin_trend.', 'lin_trend.%s', 'lo', 'loc', 'lower', 'lower left', 'maxeig', 'maximum eigenvalue', 'ml', 'n', 'none', 'r', 'r_0', 'r_1', 'season%d.%s', 'test statistic', 'trace', 'upper']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\vector_ar\svar_model.py
+# hypothesis_version: 6.148.5
+
+[-2.0, 1e-20, 1e-08, 0.05, 0.1, 1.0, 2.0, 100, 500, 1000, '0.11.0', 'A', 'AB', 'B', 'E', 'F', 'SVAR', 'a', 'ab', 'b', 'bfgs', 'c', 'e', 'endog', 'mle', 'nm', 'none', 'ols', 'raise', 'y']

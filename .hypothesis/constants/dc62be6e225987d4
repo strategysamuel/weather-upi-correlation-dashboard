@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\tabledist.py
+# hypothesis_version: 6.148.5
+
+[1.0, 'alpha is not 1d', 'alpha is not sorted', 'linear', 'max_nobs > max(size)', 'min_nobs > max(size)', 'size is not 1d', 'size is not sorted']

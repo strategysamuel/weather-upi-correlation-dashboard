@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\multivariate\multivariate_ols.py
+# hypothesis_version: 6.148.5
+
+[1e-08, 1.0, ' constant C=', ' contrast L=', ' transform M=', 'Den DF', 'E', 'Effect', 'F Value', 'H', 'Intercept', 'Num DF', "Pillai's trace", 'Pr > F', "Roy's greatest root", 'Statistic', 'Value', "Wilks' lambda", 'constant_C', 'contrast_L', 'data', 'design_info', 'index', 'none', 'pinv', 'restructuredtext en', 'stat', 'svd', 'transform_M', 'x%d']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\statespace\varmax.py
+# hypothesis_version: 6.148.5
+
+[0.05, 0.5, '%s (fixed)', '(%s)', '.', 'L%d.%s.%s', 'L%d.e(%s).%s', 'Other parameters', 'VAR', 'VARMA', 'VMA', 'W', 'X', 'ar', 'c', 'design', 'diagonal', 'drift.%s', 'end', 'enforce_stationarity', 'error_cov_type', 'fit', 'initialization', 'intercept', 'intercept.%s', 'inversion_method', 'k_ar', 'k_exog', 'k_ma', 'k_trend', 'known', 'ma', 'measurement error', 'measurement_error', 'n', 'obs_cov', 'order', 'predicted', 'regression', 'selection', 'sigma2.%s', 'sqrt.var.%s', 'start', 'state_cov', 'state_intercept', 'stationary', 'transition', 'trend', 'trend.%d.%s', 'trend_offset', 'unstructured']

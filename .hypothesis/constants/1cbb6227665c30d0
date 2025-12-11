@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\regime_switching\markov_autoregression.py
+# hypothesis_version: 6.148.5
+
+[-0.5, 0.5, 10.0, 'ar.L%d', 'ar.L%d[%d]', 'autoregressive', 'c', 'exog', 'fit', 'none', 'row_labels', 'variance']

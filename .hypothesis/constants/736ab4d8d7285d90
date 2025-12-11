@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\scipy\signal\waveforms.py
+# hypothesis_version: 6.148.5
+
+['_waveforms', 'chirp', 'gausspulse', 'sawtooth', 'signal', 'square', 'sweep_poly', 'unit_impulse', 'waveforms']

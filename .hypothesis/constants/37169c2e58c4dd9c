@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\ardl\__init__.py
+# hypothesis_version: 6.148.5
+
+['ARDL', 'ARDLResults', 'BoundsTestResult', 'UECM', 'UECMResults', 'ardl_select_order']

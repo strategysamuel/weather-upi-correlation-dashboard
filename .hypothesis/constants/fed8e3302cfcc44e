@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\statespace\representation.py
+# hypothesis_version: 6.148.5
+
+[0.0, 1e-10, 1000000.0, 'C_CONTIGUOUS', 'D', 'F', 'F_CONTIGUOUS', '_', 'approximate_diffuse', 'components', 'constant', 'd', 'design', 'diffuse', 'dtype', 'endog', 'f', 'initial_state', 'initial_state_cov', 'initial_variance', 'initialization', 'k_endog', 'k_posdef', 'k_states', 'known', 'missing', 'model', 'nmissing', 'nobs', 'obs', 'obs_cov', 'obs_intercept', 'prefix', 'selection', 'shapes', 'state intercept', 'state_cov', 'state_intercept', 'stationary', 'stationary_cov', 'time_invariant', 'transition']

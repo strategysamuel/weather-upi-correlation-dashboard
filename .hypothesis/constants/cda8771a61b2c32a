@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\duration\hazard_regression.py
+# hypothesis_version: 6.148.5
+
+[0.0, 1e-10, 0.05, 1.0, '%.0f', '%.1f', '%.3f]', '%8.3f', '0', '1', 'Avg group size:', 'Avg stratum size:', 'Coef.', 'Dependent variable:', 'HR', 'Intercept', 'L1_wt', 'Max group size:', 'Max stratum size:', 'Min group size:', 'Min stratum size:', 'Model:', 'Num groups:', 'Num strata:', 'Num. events:', 'PH Reg', 'Sample size:', 'Std.Err.', 'Ties:', '[%.3f', '[+\\-~]', '`breslow`', 'breslow', 'cnvrg_tol', 'cov_params_doc', 'cumhaz', 'disp', 'drop', 'efron', 'elastic_net', 'hr', 'ij,ik,i->jk', 'ij,ik->jk', 'l', 'lhr', 'log HR', 'log HR SE', 'maxiter', 'naive', 'params_doc', 'regularized', 'right', 'surv', 'zero', 'zero_tol']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\descriptivestats.py
+# hypothesis_version: 6.148.5
+
+[0.05, 0.25, 0.5, 0.75, 1.0, 2.0, 100.0, 100, '%s', 'Attributes', 'DataFrame', 'Description', 'Returns', 'See Also', 'alpha', 'and ', 'categorical', 'category', 'ci', 'coef_var', 'd', 'data', 'data_fmts', 'distinct', 'expand', 'freq', 'iqr', 'iqr_normal', 'jarque_bera', 'jarque_bera_pval', 'keepdims', 'kurtosis', 'lower_ci', 'mad', 'mad_normal', 'max', 'mean', 'median', 'min', 'missing', 'mode', 'mode_freq', 'nobs', 'ntop', 'numeric', 'object', 'obs', 'omit', 'percentiles', 'ptp', 'range', 'skew', 'std', 'std_err', 'top', 'upper_ci', 'use_t', 'uss', 'var']

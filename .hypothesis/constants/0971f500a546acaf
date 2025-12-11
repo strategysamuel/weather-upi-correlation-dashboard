@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\api.py
+# hypothesis_version: 6.148.5
+
+['AR', 'ARDL', 'ARIMA', 'ArmaProcess', 'AutoReg', 'DynamicFactor', 'DynamicFactorMQ', 'ETSModel', 'ExponentialSmoothing', 'Holt', 'MarkovAutoregression', 'MarkovRegression', 'SARIMAX', 'STL', 'STLForecast', 'SVAR', 'SimpleExpSmoothing', 'UECM', 'UnobservedComponents', 'VAR', 'VARMAX', 'VECM', 'acf', 'acovf', 'add_lag', 'add_trend', 'adfuller', 'ardl_select_order', 'arima', 'arma_generate_sample', 'arma_order_select_ic', 'bds', 'bk_filter', 'ccf', 'ccovf', 'cf_filter', 'coint', 'datetools', 'detrend', 'filters', 'graphics', 'hp_filter', 'innovations', 'interp', 'kpss', 'lagmat', 'lagmat2ds', 'pacf', 'pacf_ols', 'pacf_yw', 'q_stat', 'range_unit_root_test', 'seasonal_decompose', 'statespace', 'stattools', 'tsatools', 'var', 'x13_arima_analysis', 'zivot_andrews']

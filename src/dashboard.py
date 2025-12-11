@@ -28,6 +28,8 @@ from weather_api import get_weather_data, PipelineError
 from data_loader import load_upi_csv
 from data_transformer import DataTransformer
 from analytics_engine import analyze_weather_upi_correlations
+import statsmodels.api as sm
+import time
 
 class WeatherUPIDashboard:
     """Main dashboard class for Weather-UPI correlation analysis"""
@@ -272,6 +274,27 @@ class WeatherUPIDashboard:
                 help="Automatically use CSV data if live API fails"
             )
             
+            # Refresh interval selector
+            refresh_options = {
+                "None": None,
+                "5 minutes": 5 * 60,
+                "15 minutes": 15 * 60,
+                "1 hour": 60 * 60
+            }
+            
+            selected_refresh = st.sidebar.selectbox(
+                "Auto-refresh interval:",
+                options=list(refresh_options.keys()),
+                index=0,
+                help="Automatically fetch live data at selected intervals"
+            )
+            
+            refresh_interval = refresh_options[selected_refresh]
+            
+            # Handle auto-refresh
+            if refresh_interval is not None:
+                self.handle_auto_refresh(refresh_interval, auto_fallback)
+            
             if st.sidebar.button("Fetch Live Weather Data", help="Fetch fresh data from weather API"):
                 self.handle_live_fetch(auto_fallback)
             
@@ -400,6 +423,41 @@ class WeatherUPIDashboard:
             
         except Exception as e:
             st.error(f"❌ Error loading CSV fallback: {e}")
+    
+    def handle_auto_refresh(self, refresh_interval: int, auto_fallback: bool):
+        """Handle automatic refresh at specified intervals"""
+        # Initialize session state for refresh tracking
+        if 'last_refresh' not in st.session_state:
+            st.session_state.last_refresh = time.time()
+        
+        if 'refresh_enabled' not in st.session_state:
+            st.session_state.refresh_enabled = True
+        
+        current_time = time.time()
+        time_since_refresh = current_time - st.session_state.last_refresh
+        
+        # Check if it's time to refresh
+        if time_since_refresh >= refresh_interval and st.session_state.refresh_enabled:
+            st.sidebar.info(f"🔄 Auto-refreshing data...")
+            
+            # Perform the refresh
+            try:
+                self.handle_live_fetch(auto_fallback)
+                st.session_state.last_refresh = current_time
+                st.sidebar.success("✅ Auto-refresh completed")
+            except Exception as e:
+                st.sidebar.error(f"❌ Auto-refresh failed: {e}")
+        
+        # Show next refresh countdown
+        next_refresh_in = refresh_interval - time_since_refresh
+        if next_refresh_in > 0:
+            minutes = int(next_refresh_in // 60)
+            seconds = int(next_refresh_in % 60)
+            st.sidebar.info(f"⏱️ Next refresh in: {minutes}m {seconds}s")
+            
+            # Auto-rerun to update countdown
+            time.sleep(1)
+            st.rerun()
     
     def display_header(self):
         """Display main dashboard header with data source badge"""

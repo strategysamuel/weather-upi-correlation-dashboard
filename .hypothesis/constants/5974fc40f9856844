@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\oneway.py
+# hypothesis_version: 6.148.5
+
+[0.0, 1e-13, 0.05, 0.1, 1.0, 3.0, 1000, '2s', "Cohen's f_squared", "Wellek's psi_squared", 'abs', 'bf', 'df2', 'df_num2', 'equal', 'f2', 'fsqu', 'fsquared', 'median', 'pvalue2', 'ts', 'two-sided', 'unequal', 'use_var', 'welch_correction', 'wellek']

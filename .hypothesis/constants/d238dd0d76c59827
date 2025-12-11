@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\scipy\signal\_support_alternative_backends.py
+# hypothesis_version: 6.148.5
+
+['_signature', 'convolve', 'convolve2d', 'correlate', 'correlate2d', 'csd', 'detrend', 'envelope', 'fftconvolve', 'freqz_sos', 'get_window', 'istft', 'lfilter_zi', 'remez', 'signal', 'sosfilt_zi', 'sosfreqz', 'welch']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\discrete\count_model.py
+# hypothesis_version: 6.148.5
+
+[0.0001, 0.01, 0.03, 0.1, 1.0, 'ZeroInflatedPoisson', 'alpha', 'auto', 'bfgs', 'defined_by_method', 'dydx', 'exog_infl', 'exposure', 'extra_attr', 'extra_params', 'ignore', 'inflate_%s', 'inflation', 'l1', 'linear', 'logit', 'mean', 'mean-main', 'mean-nonzero', 'nm', 'none', 'nonrobust', 'offset', 'one_line_description', 'overall', 'p', 'params', 'prob', 'prob-main', 'prob-zero', 'probit', 'var', 'y_values']

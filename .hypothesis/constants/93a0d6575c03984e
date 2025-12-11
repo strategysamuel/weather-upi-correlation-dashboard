@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\forecasting\stl.py
+# hypothesis_version: 6.148.5
+
+[' Length', ':', 'Low Pass', 'Model', 'STL Configuration', 'Trend', '_', 'dict[str, Any]', 'endog', 'fit', 'forecast', 'index', 'inner_iter', 'low_pass', 'low_pass_deg', 'low_pass_jump', 'model', 'model_kwargs', 'norm', 'outer_iter', 'period', 'robust', 'seasonal', 'seasonal_deg', 'seasonal_jump', 'summary', 'trend', 'trend_deg', 'trend_jump']

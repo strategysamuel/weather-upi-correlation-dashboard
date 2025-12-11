@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\graphics\regressionplots.py
+# hypothesis_version: 6.148.5
+
+[1e-06, 0.05, 0.075, 0.2, 0.5, 0.6, 0.66, 0.7, 0.75, 0.9, 0.95, 1.0, 1.5, 2.0, ' residuals', '%s', '+', '-1', 'Added variable plot', 'CCPR Plot', 'CERES residuals plot', 'D', 'Influence Plot', 'Leverage', 'Residuals', 'Residuals versus %s', 'True values', 'Y and Fitted vs. X', 'abline_plot', 'add_lowess', 'b', 'b-', 'best', 'black', 'bo', 'bottom', 'center', 'ceres_resids', 'color', 'converged', 'coo', 'cooks', 'data_weights', 'dff', 'e(%s | X)', 'extra_params_doc', 'fitted', 'fontdict', 'fontsize', 'index', 'influence_plot', 'k', 'large', 'o', 'partial_resids', 'plot_added_variable', 'plot_ccpr', 'plot_ccpr_grid', 'plot_ceres_residuals', 'plot_fit', 'plot_leverage_resid2', 'plot_partregress', 'plot_regress_exog', 'r', 'resid', 'resid_deviance', 'small', 'start_params', 'x', 'x-large', 'xlim_changed', 'y', 'ylim_changed']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\graphics\tsaplots.py
+# hypothesis_version: 6.148.5
+
+[0.05, 0.1, 0.25, 0.5, 1.25, 'Autocorrelation', 'Cross-correlation', 'M', 'None', 'Q', 'adjusted', 'best', 'forecast', 'gray', 'k', 'linestyle', 'ls', 'marker', 'markersize', 'none', 'o', 'q1', 'q2', 'q3', 'q4', 'r', 'unbiased', 'x', 'ywm']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\statespace\dynamic_factor.py
+# hypothesis_version: 6.148.5
+
+[0.05, 0.5, '$R^2$', '%d regressors', '%s(%d) errors', '.', 'AR', 'C', 'Endogenous variables', 'Factor %i', 'L%d.e(%s).e(%s)', 'L%d.f%d.f%d', 'Other parameters', 'SUR(%d regressors)', 'VAR', 'both', 'burg', 'cov.chol[%d,%d]', 'design', 'diagonal', 'dummy', 'e(%s)', 'e(%s).L%d', 'enforce_stationarity', 'error_cov', 'error_cov_type', 'error_order', 'error_transition', 'error_var', 'exog', 'f%d', 'f%d.L%d', 'factor_loadings', 'factor_order', 'factor_transition', 'filtered', 'fit', 'initialization', 'k_endog', 'k_exog', 'k_factors', 'loading.f%d.%s', 'n', 'obs_cov', 'obs_intercept', 'scalar', 'selection', 'sigma2', 'sigma2.%s', 'smoothed', 'state_cov', 'stationary', 'transition', 'unstructured']

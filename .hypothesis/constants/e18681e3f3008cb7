@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\discrete\discrete_margins.py
+# hypothesis_version: 6.148.5
+
+[0.05, 1.0, ' Marginal Effects', 'At:', 'Conf. Int. Low', 'Cont. Int. Hi.', 'Dep. Variable:', 'F', 'J', 'Method:', 'P>|z|', 'Pr(>|z|)', 'Std. Err.', '[', ']', 'all', 'at', 'd(lny)/d(lnx)', 'd(lny)/dx', 'dy/d(lnx)', 'dy/dx', 'dydx', 'dyex', 'endog', 'exog', 'ey', 'eydx', 'eyex', 'k_extra', 'mean', 'median', 'method', 'overall', 'std err', 'z', 'zero']

@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\arima\estimators\hannan_rissanen.py
+# hypothesis_version: 6.148.5
+
+['.', 'L', 'ar', 'both', 'initial_ar_order', 'ma', 'mle', 'resid', 'sigma2', 'spec']

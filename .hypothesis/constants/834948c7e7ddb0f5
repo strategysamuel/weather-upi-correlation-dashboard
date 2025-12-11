@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\imputation\mice.py
+# hypothesis_version: 6.148.5
+
+[0.0, 0.0001, 0.05, 0.1, 0.5, 0.6, 0.7, 0.8, ' + ', ' fitted', ' observed or imputed', ' ~ ', '%.2f', '%8.3f', '%d', '-', '/', '0 + ', 'All', 'Cases', 'Dependent variable:', 'FMI', 'Frequency', 'Imp', 'MICE', 'Method:', 'Model:', 'Num. imputations', 'O', 'Obs', 'Sample size:', 'Scale', 'W', '_', 'all', 'auto', 'boot', 'center right', 'darkgrey', 'dataframe', 'gaussian', 'gist_ncar_r', 'grey', 'histtype', 'i', 'ii', 'imp', 'io', 'l', 'lime', 'nearest', 'o', 'obs', 'oi', 'oo', 'orange', 'pattern', 'predicted_values', 'proportion', 'raw', 'red', 'start_params', 'step', 'white']

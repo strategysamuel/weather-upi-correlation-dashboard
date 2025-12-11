@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\contrast.py
+# hypothesis_version: 6.148.5
+
+[0.05, 2.0, 'F', 'P>%s', 'Test for Constraints', '_contrast_matrix', '_dframe', 'c%d', 'chi2', 'constraints', 'df constraint', 'df denom', 'df_constraint', 'df_denom', 'dist_args', 'distribution', 'fvalue', 'hs', 'pairs', 'pairwise', 'pvalue', 'pvalue-%s', 'pw', 'reject-%s', 'statistic', 't']

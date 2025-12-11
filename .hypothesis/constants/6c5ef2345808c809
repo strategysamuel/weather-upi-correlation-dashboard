@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\gam\generalized_additive_model.py
+# hypothesis_version: 6.148.5
+
+[0.0, 1e-20, 1e-08, 1.0, 1.96, 100, 500, 1000, 2000, '-', 'Nelder-Mead', 'PIRLS', '_offset_exposure', 'aic', 'alpha', 'basinhopping', 'blue', 'criterion', 'dataframe', 'design_info', 'design_info_linear', 'deviance', 'formula', 'hasconst', 'irls', 'iteration', 'maxfev', 'maxiter', 'method', 'minimize', 'name', 'nm', 'none', 'nonrobust', 'options', 'params', 'penal', 'pirls', 'predicted_values']
