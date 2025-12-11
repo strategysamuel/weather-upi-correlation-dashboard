@@ -1,0 +1,4 @@
+# file: D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\weather_api.py
+# hypothesis_version: 6.148.5
+
+[19.07, 72.88, 200, '%Y-%m-%d', 'API_Data', 'Asia/Kolkata', 'Mumbai', 'avg_temp_c', 'city', 'condition', 'daily', 'date', 'end_date', 'humidity_pct', 'latitude', 'longitude', 'precipitation_sum', 'rain_mm', 'start_date', 'temperature_2m_mean', 'time', 'timezone']

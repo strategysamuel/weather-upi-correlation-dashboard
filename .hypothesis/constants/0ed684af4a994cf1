@@ -1,0 +1,4 @@
+# file: D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_transformer.py
+# hypothesis_version: 6.148.5
+
+['%Y-%m-%d', '%Y-%m-%d %H:%M:%S', '%Y/%m/%d', '%d-%m-%Y', '%d/%m/%Y', '%m/%d/%Y', '[^a-z0-9_]', '_', '_+', '_upi', '_weather', 'avg_temp_c', 'avg_txn_value_inr', 'avg_value', 'city', 'coerce', 'condition', 'date', 'date_col', 'humidity', 'humidity_pct', 'inner', 'location', 'notes', 'precipitation', 'precipitation_mm', 'rain_mm', 'rainfall', 'relative_humidity', 'temp_c', 'temperature', 'temperature_c', 'total_upi_txn_count', 'transaction_count', 'txn_count', 'txn_value', 'upi', 'upi_transactions', 'weather', 'weather_condition']

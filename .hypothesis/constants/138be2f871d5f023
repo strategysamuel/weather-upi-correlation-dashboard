@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\pytz\exceptions.py
+# hypothesis_version: 6.148.5
+
+['AmbiguousTimeError', 'InvalidTimeError', 'NonExistentTimeError', 'UnknownTimeZoneError']

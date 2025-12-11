@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\plotly\express\_chart_types.py
+# hypothesis_version: 6.148.5
+
+['all', 'auto', 'clockwise', 'color', 'country names', 'float', 'funnelareacolorway', 'h', 'iciclecolorway', 'lines', 'none', 'overlay', 'piecolorway', 'points', 'probability', 'relative', 'rgba(255,255,255,0)', 'select', 'standard', 'sunburstcolorway', 'timeline', 'total', 'trace', 'treemapcolorway', 'x', 'y']

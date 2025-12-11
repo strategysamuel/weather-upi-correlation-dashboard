@@ -1,0 +1,27 @@
+WEATHER-UPI CORRELATION PIPELINE SUMMARY
+==================================================
+Pipeline executed at: 2025-12-11 08:54:52
+
+DATA LOADING:
+  Weather records: 30
+  UPI records: 30
+  Merged records: 30
+
+VALIDATION RESULTS:
+  Weather validation: PASSED
+  Weather errors: 0
+  Weather warnings: 0
+  UPI validation: PASSED
+  UPI errors: 0
+  UPI warnings: 0
+
+ANALYTICS RESULTS:
+  Correlations computed: 6
+  Transaction outliers: 4
+  Weather outliers: 3
+
+OUTPUT FILES GENERATED:
+  Merged dataset: D:\SAMUEL\Kiro-Projects\weather-upi-insights\output\merged_weather_upi_data.csv
+  Analytics results: D:\SAMUEL\Kiro-Projects\weather-upi-insights\output\analytics.csv
+  Validation report: D:\SAMUEL\Kiro-Projects\weather-upi-insights\output\validation_report.txt
+  Pipeline log: D:\SAMUEL\Kiro-Projects\weather-upi-insights\output\pipeline.log

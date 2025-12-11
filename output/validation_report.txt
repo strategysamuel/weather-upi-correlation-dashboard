@@ -1,0 +1,20 @@
+============================================================
+DATA VALIDATION REPORT
+============================================================
+
+OVERALL STATUS: PASSED
+
+WEATHER DATA VALIDATION:
+------------------------------
+Validation PASSED
+
+UPI DATA VALIDATION:
+------------------------------
+Validation PASSED
+
+SUMMARY:
+------------------------------
+Total Errors: 0
+Total Warnings: 0
+
+✓ All validations passed. Data is ready for analysis.

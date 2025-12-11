@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\narwhals\stable\v1\selectors.py
+# hypothesis_version: 6.148.5
+
+['all', 'boolean', 'by_dtype', 'categorical', 'datetime', 'matches', 'numeric', 'string']

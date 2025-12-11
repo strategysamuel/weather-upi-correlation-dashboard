@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\pandas\core\shared_docs.py
+# hypothesis_version: 6.148.5
+
+['aggregate', 'compare', 'compression_options', 'groupby', 'idxmax', 'idxmin', 'melt', 'replace', 'storage_options', 'transform']

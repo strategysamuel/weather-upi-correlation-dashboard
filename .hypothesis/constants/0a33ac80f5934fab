@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\patsy\redundancy.py
+# hypothesis_version: 6.148.5
+
+['%r%s', '%s(%r)', '+', '-', '->', 'a', 'a+', 'a-', 'b', 'b+', 'b-', 'c', 'c-', 'd', 'd-', 'testing if:', 'x']

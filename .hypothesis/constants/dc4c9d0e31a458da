@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\kiwisolver\__init__.py
+# hypothesis_version: 6.148.5
+
+['BadRequiredStrength', 'Constraint', 'DuplicateConstraint', 'Expression', 'Solver', 'Term', 'UnknownConstraint', 'UnknownEditVariable', 'Variable', '__kiwi_version__', '__version__', 'strength']

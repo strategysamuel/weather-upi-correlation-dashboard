@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\compat\__init__.py
+# hypothesis_version: 6.148.5
+
+['asbytes', 'asstr', 'asunicode', 'lfilter', 'lmap', 'lrange', 'lzip', 'test']

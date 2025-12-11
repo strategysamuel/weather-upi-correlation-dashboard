@@ -1,0 +1,196 @@
+name: weather-upi-dashboard
+description: "Live weather and UPI transaction correlation analysis using MCP"
+version: "1.0.0"
+
+datasets:
+  upi_csv:
+    type: local_csv
+    path: "upi_transactions_india_2024_11_synthetic.csv"
+    description: "Daily UPI transaction volumes and values for India"
+    schema:
+      - date: datetime
+      - total_upi_txn_count: integer
+      - avg_txn_value_inr: float
+      - notes: string
+
+  weather_api:
+    type: mcp_http
+    endpoint: "https://api.open-meteo.com/v1/forecast"
+    description: "Live weather data from Open-Meteo API via MCP"
+    parameters:
+      latitude: 19.07
+      longitude: 72.88
+      daily: "temperature_2m_max,temperature_2m_min,rain_sum,relative_humidity_2m_mean"
+      timezone: "Asia/Kolkata"
+    schema:
+      - date: datetime
+      - temperature_2m_max: float
+      - temperature_2m_min: float
+      - rain_sum: float
+      - relative_humidity_2m_mean: float
+
+  weather_fallback:
+    type: local_csv
+    path: "weather_mumbai_2024_11_synthetic.csv"
+    description: "Fallback weather data when API fails"
+    schema:
+      - date: datetime
+      - city: string
+      - avg_temp_c: float
+      - humidity_pct: float
+      - rain_mm: float
+      - condition: string
+
+pipeline_steps:
+  1_load_upi:
+    module: "load_upi_data"
+    input: upi_csv
+    output: upi_clean
+    description: "Load and validate UPI transaction data"
+
+  2_fetch_weather:
+    module: "fetch_weather_api"
+    input: weather_api
+    fallback: weather_fallback
+    output: weather_clean
+    description: "Fetch live weather via MCP with CSV fallback"
+
+  3_normalize_weather:
+    module: "normalize_weather_api"
+    input: weather_clean
+    output: weather_normalized
+    description: "Normalize API response to match UPI format"
+
+  4_standardize_dates:
+    module: "standardize_columns"
+    input: [upi_clean, weather_normalized]
+    output: [upi_std, weather_std]
+    description: "Ensure consistent date formats"
+
+  5_merge_datasets:
+    module: "merge_on_date"
+    input: [upi_std, weather_std]
+    output: merged_dataset
+    description: "Join UPI and weather data on date"
+
+  6_compute_correlations:
+    module: "compute_correlations"
+    input: merged_dataset
+    output: correlation_results
+    description: "Calculate weather-UPI correlations"
+
+  7_detect_outliers:
+    module: "detect_outliers"
+    input: merged_dataset
+    output: analytics_dataset
+    description: "Identify anomalies and add flags"
+
+test_suite:
+  api_tests:
+    - name: "API Response Validation"
+      description: "Verify MCP API returns HTTP 200 and valid JSON"
+      property: "API calls succeed with required fields"
+
+    - name: "Fallback Mechanism"
+      description: "Test CSV fallback when API fails"
+      property: "Fallback preserves data integrity"
+
+  data_integrity:
+    - name: "Non-negative Transactions"
+      description: "UPI transaction counts must be >= 0"
+      property: "All transaction values are non-negative"
+
+    - name: "Date Range Validation"
+      description: "All dates within expected November 2024 range"
+      property: "Dates fall within valid range"
+
+    - name: "Missing Weather Values"
+      description: "No null values in critical weather fields"
+      property: "Required weather fields are complete"
+
+  merge_correctness:
+    - name: "Date Merge Accuracy"
+      description: "Merge preserves all matching date records"
+      property: "No data loss during merge operation"
+
+    - name: "Correlation Bounds"
+      description: "All correlations between -1 and 1"
+      property: "Correlation values are mathematically valid"
+
+expected_outputs:
+  merged_dataset:
+    path: "output/merged_data.csv"
+    description: "Combined UPI and weather data by date"
+    columns:
+      - date
+      - total_upi_txn_count
+      - avg_txn_value_inr
+      - avg_temp_c
+      - humidity_pct
+      - rain_mm
+      - condition
+
+  analytics_dataset:
+    path: "output/analytics.csv"
+    description: "Final dataset with correlations and anomaly flags"
+    columns:
+      - date
+      - total_upi_txn_count
+      - avg_txn_value_inr
+      - avg_temp_c
+      - humidity_pct
+      - rain_mm
+      - condition
+      - rain_upi_correlation
+      - temp_upi_correlation
+      - txn_volume_outlier
+      - weather_outlier
+      - txn_z_score
+      - temp_z_score
+      - rain_z_score
+
+transformations:
+  - name: "load_upi_data"
+    path: ".kiro/transformations/load_upi_data.py"
+    description: "Load and validate UPI CSV data"
+
+  - name: "fetch_weather_api"
+    path: ".kiro/transformations/fetch_weather_api.py"
+    description: "Fetch weather via MCP with fallback"
+
+  - name: "normalize_weather_api"
+    path: ".kiro/transformations/normalize_weather_api.py"
+    description: "Normalize API response format"
+
+  - name: "standardize_columns"
+    path: ".kiro/transformations/standardize_columns.py"
+    description: "Standardize column names and formats"
+
+  - name: "merge_on_date"
+    path: ".kiro/transformations/merge_on_date.py"
+    description: "Merge datasets on date column"
+
+  - name: "compute_correlations"
+    path: ".kiro/transformations/compute_correlations.py"
+    description: "Calculate statistical correlations"
+
+  - name: "detect_outliers"
+    path: ".kiro/transformations/detect_outliers.py"
+    description: "Identify anomalies using z-scores"
+
+dashboard:
+  framework: streamlit
+  file: "dashboard.py"
+  features:
+    - "UPI volume time series chart"
+    - "Rainfall time series chart"
+    - "Temperature and humidity trends"
+    - "Correlation heatmap"
+    - "Auto-generated insights"
+    - "Interactive date filtering"
+    - "Anomaly highlighting"
+
+documentation:
+  readme: "README.md"
+  blog_draft: "aws_builder_blog_draft.md"
+  architecture_diagram: "architecture.ascii"

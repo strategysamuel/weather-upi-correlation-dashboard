@@ -1,0 +1,4 @@
+# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\streamlit\runtime\caching\storage\in_memory_cache_storage_wrapper.py
+# hypothesis_version: 6.148.5
+
+['Memory cache HIT: %s', 'st_cache_data']

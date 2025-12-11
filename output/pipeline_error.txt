@@ -1,0 +1,15 @@
+Pipeline execution failed at: 2025-12-11 08:54:48
+Error: UPI CSV file not found: nonexistent_upi.csv
+
+Full traceback:
+Traceback (most recent call last):
+  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\main.py", line 316, in run_pipeline
+    upi_df = self.load_upi_data()
+  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\main.py", line 89, in load_upi_data
+    upi_df = load_upi_csv(str(config.UPI_DATA_FILE))
+  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_loader.py", line 225, in load_upi_csv
+    return loader.load_upi_data(csv_path)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_loader.py", line 40, in load_upi_data
+    raise FileNotFoundError(f"UPI CSV file not found: {csv_path}")
+FileNotFoundError: UPI CSV file not found: nonexistent_upi.csv
