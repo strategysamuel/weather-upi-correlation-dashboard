@@ -19,6 +19,7 @@ project_root = current_dir.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from dashboard import WeatherUPIDashboard
+import config
 
 
 class TestInsightGeneration:
@@ -344,3 +345,83 @@ class TestInsightGeneration:
                 assert "Moderate" in temp_insight or "Strong" in temp_insight, f"Correlation {temp_txn_corr:.3f} should be classified as Moderate or Strong"
             elif abs(temp_txn_corr) > 0.3:
                 assert "Moderate" in temp_insight, f"Correlation {temp_txn_corr:.3f} should be classified as Moderate"
+
+
+class TestLiveFetchFunctionality:
+    """Test class for live data fetch functionality"""
+    
+    def setup_method(self):
+        """Set up test fixtures"""
+        self.dashboard = WeatherUPIDashboard()
+        self.dashboard.setup_page_config = lambda: None
+    
+    def test_data_source_detection_live(self):
+        """Test data source detection for live API data"""
+        # Create mock data with API_Data condition
+        test_data = pd.DataFrame({
+            'date': ['2024-11-01', '2024-11-02'],
+            'condition': ['API_Data', 'API_Data'],
+            'avg_temp_c': [25.0, 26.0]
+        })
+        
+        # Mock the file reading
+        import tempfile
+        import os
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+            test_data.to_csv(f.name, index=False)
+            temp_file = f.name
+            
+        # Temporarily replace the config path
+        original_path = config.MERGED_DATA_FILE
+        config.MERGED_DATA_FILE = Path(temp_file)
+        
+        try:
+            status = self.dashboard.get_data_source_status()
+            assert status == "LIVE (API)"
+        finally:
+            config.MERGED_DATA_FILE = original_path
+            try:
+                os.unlink(temp_file)
+            except PermissionError:
+                pass  # Ignore Windows file permission issues in tests
+    
+    def test_data_source_detection_csv(self):
+        """Test data source detection for CSV fallback data"""
+        # Create mock data with non-API condition
+        test_data = pd.DataFrame({
+            'date': ['2024-11-01', '2024-11-02'],
+            'condition': ['Clear', 'Rain'],
+            'avg_temp_c': [25.0, 26.0]
+        })
+        
+        import tempfile
+        import os
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+            test_data.to_csv(f.name, index=False)
+            temp_file = f.name
+            
+        original_path = config.MERGED_DATA_FILE
+        config.MERGED_DATA_FILE = Path(temp_file)
+        
+        try:
+            status = self.dashboard.get_data_source_status()
+            assert status == "CSV (fallback)"
+        finally:
+            config.MERGED_DATA_FILE = original_path
+            try:
+                os.unlink(temp_file)
+            except PermissionError:
+                pass  # Ignore Windows file permission issues in tests
+    
+    def test_data_source_detection_unknown(self):
+        """Test data source detection when file doesn't exist"""
+        original_path = config.MERGED_DATA_FILE
+        config.MERGED_DATA_FILE = Path("nonexistent_file.csv")
+        
+        try:
+            status = self.dashboard.get_data_source_status()
+            assert status == "Unknown"
+        finally:
+            config.MERGED_DATA_FILE = original_path

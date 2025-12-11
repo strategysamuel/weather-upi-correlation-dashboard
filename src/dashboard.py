@@ -24,6 +24,10 @@ project_root = current_dir.parent
 sys.path.insert(0, str(project_root))
 
 import config
+from weather_api import get_weather_data, PipelineError
+from data_loader import load_upi_csv
+from data_transformer import DataTransformer
+from analytics_engine import analyze_weather_upi_correlations
 
 class WeatherUPIDashboard:
     """Main dashboard class for Weather-UPI correlation analysis"""
@@ -260,6 +264,19 @@ class WeatherUPIDashboard:
             
             st.sidebar.markdown("---")
             
+            # Live data fetch controls
+            st.sidebar.markdown("### 🔄 Live Data Fetch")
+            auto_fallback = st.sidebar.checkbox(
+                "Auto fallback to CSV if live fails",
+                value=False,
+                help="Automatically use CSV data if live API fails"
+            )
+            
+            if st.sidebar.button("Fetch Live Weather Data", help="Fetch fresh data from weather API"):
+                self.handle_live_fetch(auto_fallback)
+            
+            st.sidebar.markdown("---")
+            
             # Data quality indicators
             st.sidebar.markdown("### 📊 Data Quality")
             total_records = len(filtered_data)
@@ -283,11 +300,122 @@ class WeatherUPIDashboard:
         
         return page, filtered_data
     
+    def get_data_source_status(self):
+        """Determine if data comes from live API or CSV fallback"""
+        try:
+            merged_file = config.MERGED_DATA_FILE
+            if merged_file.exists():
+                df = pd.read_csv(merged_file)
+                if 'condition' in df.columns:
+                    if any(df['condition'] == 'API_Data'):
+                        return "LIVE (API)"
+                    else:
+                        return "CSV (fallback)"
+                else:
+                    return "CSV (fallback)"
+            else:
+                return "Unknown"
+        except Exception:
+            return "Unknown"
+    
+    def handle_live_fetch(self, auto_fallback: bool):
+        """Handle live data fetch with fallback logic"""
+        with st.spinner("Fetching live weather data..."):
+            try:
+                # Fetch live weather data
+                weather_df = get_weather_data(
+                    start_date="2024-11-01",
+                    end_date="2024-11-30",
+                    use_csv_fallback=False,
+                    interactive=False
+                )
+                
+                # Load UPI data
+                upi_df = load_upi_csv(str(config.UPI_DATA_FILE))
+                
+                # Transform and merge
+                transformer = DataTransformer()
+                merged_df = transformer.transform_and_merge(weather_df, upi_df)
+                
+                # Perform analytics
+                analytics_results = analyze_weather_upi_correlations(merged_df)
+                enhanced_df = analytics_results.get('enhanced_dataframe')
+                
+                # Save results
+                merged_df.to_csv(config.MERGED_DATA_FILE, index=False)
+                if enhanced_df is not None:
+                    enhanced_df.to_csv(config.ANALYTICS_FILE, index=False)
+                
+                # Clear cache and refresh
+                self.load_data.clear()
+                st.success(f"✅ Live data loaded — {len(merged_df)} records")
+                st.rerun()
+                
+            except PipelineError as e:
+                if auto_fallback:
+                    self.handle_csv_fallback()
+                    st.warning("⚠️ Live failed — CSV fallback loaded")
+                else:
+                    st.error(f"❌ Live API failed: {e}")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button("Load CSV fallback"):
+                            self.handle_csv_fallback()
+                            st.rerun()
+                    with col2:
+                        if st.button("Cancel"):
+                            st.info("Operation cancelled")
+            except Exception as e:
+                st.error(f"❌ Error during live fetch: {e}")
+    
+    def handle_csv_fallback(self):
+        """Handle CSV fallback loading"""
+        try:
+            # Load weather data from CSV
+            weather_df = get_weather_data(
+                start_date="2024-11-01",
+                end_date="2024-11-30",
+                use_csv_fallback=True,
+                interactive=False
+            )
+            
+            # Load UPI data
+            upi_df = load_upi_csv(str(config.UPI_DATA_FILE))
+            
+            # Transform and merge
+            transformer = DataTransformer()
+            merged_df = transformer.transform_and_merge(weather_df, upi_df)
+            
+            # Perform analytics
+            analytics_results = analyze_weather_upi_correlations(merged_df)
+            enhanced_df = analytics_results.get('enhanced_dataframe')
+            
+            # Save results
+            merged_df.to_csv(config.MERGED_DATA_FILE, index=False)
+            if enhanced_df is not None:
+                enhanced_df.to_csv(config.ANALYTICS_FILE, index=False)
+            
+            # Clear cache
+            self.load_data.clear()
+            
+        except Exception as e:
+            st.error(f"❌ Error loading CSV fallback: {e}")
+    
     def display_header(self):
-        """Display main dashboard header"""
+        """Display main dashboard header with data source badge"""
         st.markdown('<h1 class="main-header">🌦️ Weather-UPI Correlation Dashboard</h1>', 
                    unsafe_allow_html=True)
         st.markdown("**Analyzing correlations between Mumbai weather patterns and UPI transaction data**")
+        
+        # Data source badge
+        data_source = self.get_data_source_status()
+        if data_source == "LIVE (API)":
+            st.success(f"📡 Data source: {data_source}")
+        elif data_source == "CSV (fallback)":
+            st.info(f"📁 Data source: {data_source}")
+        else:
+            st.warning(f"❓ Data source: {data_source}")
+        
         st.markdown("---")
     
     def run(self):
