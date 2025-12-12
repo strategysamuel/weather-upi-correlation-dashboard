@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\arima\model.py
-# hypothesis_version: 6.148.5
-
-['burg', 'c', 'concentrate_scale', 'disp', 'enforce_stationarity', 'fit', 'fixed_params', 'hannan_rissanen', 'includes_fixed', 'innovations', 'innovations_mle', 'measurement_error', 'mle_regression', 'n', 'none', 'simple_differencing', 'start_params', 'statespace', 'transformed', 'yule_walker']

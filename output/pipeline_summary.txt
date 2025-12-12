@@ -1,6 +1,6 @@
 WEATHER-UPI CORRELATION PIPELINE SUMMARY
 ==================================================
-Pipeline executed at: 2025-12-12 09:05:32
+Pipeline executed at: 2025-12-12 13:31:40
 
 DATA LOADING:
   Weather records: 30
@@ -17,8 +17,8 @@ VALIDATION RESULTS:
 
 ANALYTICS RESULTS:
   Correlations computed: 6
-  Transaction outliers: 4
-  Weather outliers: 3
+  Transaction outliers: 1
+  Weather outliers: 0
 
 OUTPUT FILES GENERATED:
   Merged dataset: D:\SAMUEL\Kiro-Projects\weather-upi-insights\output\merged_weather_upi_data.csv

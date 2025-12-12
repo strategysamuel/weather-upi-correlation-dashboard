@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\streamlit\elements\lib\mutable_status_container.py
-# hypothesis_version: 6.148.5
-
-[0.05, ':material/check:', ':material/error:', 'StatusContainer', 'complete', 'error', 'expanded', 'running', 'spinner', 'stretch']

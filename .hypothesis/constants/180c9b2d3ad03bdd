@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\statespace\_quarterly_ar1.py
-# hypothesis_version: 6.148.5
-
-[1e-06, 0.5, 1.0, 500, 'design', 'ignore', 'iter', 'known', 'llf', 'maxiter', 'none', 'params', 'phi', 'selection', 'sigma2', 'state_cov', 'stationary', 'tolerance', 'transition']

@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\narwhals\_compliant\any_namespace.py
-# hypothesis_version: 6.148.5
-
-['CatNamespace', 'DateTimeNamespace', 'ListNamespace', 'NameNamespace', 'NamespaceAccessor', 'StringNamespace', 'StructNamespace', 'T', 'cat', 'dt', 'list', 'name', 'str', 'struct']

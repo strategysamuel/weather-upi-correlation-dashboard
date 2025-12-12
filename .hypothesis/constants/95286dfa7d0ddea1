@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\base\_prediction_inference.py
-# hypothesis_version: 6.148.5
-
-[0.05, 1.0, 2.0, '2-sided', '2s', '_use_endpoint', 'ci_lower', 'ci_upper', 'delta', 'endpoint', 'family', 'fixed scale', 'formula', 'index', 'invalid alternative', 'l', 'larger', 'linear', 'link', 'mean', 'mean_ci_lower', 'mean_ci_upper', 'mean_se', 'norm', 'predicted', 'row_labels', 's', 'scale', 'se', 'smaller', 't', 'two-sided', 'which']

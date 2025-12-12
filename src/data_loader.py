@@ -10,6 +10,13 @@ import chardet
 import logging
 from typing import Optional
 import os
+import sys
+from pathlib import Path
+
+# Add project root to path for config import
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
+from upi_simulator import simulate_upi_data
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -223,10 +230,9 @@ def load_weather_fallback(csv_path: str = "weather_mumbai_2024_11_synthetic.csv"
         logger.error(f"Error loading weather fallback data: {e}")
         raise
 
-# Convenience functions
-def load_upi_csv(csv_path: str) -> pd.DataFrame:
+def load_upi_data_from_csv(csv_path: str) -> pd.DataFrame:
     """
-    Convenience function to load UPI data
+    Load UPI data from CSV file (fallback function)
     
     Args:
         csv_path: Path to UPI CSV file
@@ -236,3 +242,42 @@ def load_upi_csv(csv_path: str) -> pd.DataFrame:
     """
     loader = UPIDataLoader()
     return loader.load_upi_data(csv_path)
+
+def load_upi_data(start_date, end_date):
+    """
+    Load UPI data using simulator or CSV fallback
+    
+    Args:
+        start_date: Start date for data generation
+        end_date: End date for data generation
+        
+    Returns:
+        UPI DataFrame
+    """
+    if config.USE_UPI_SIMULATOR:
+        logger.info("Using UPI simulator for data generation")
+        upi_df = simulate_upi_data(
+            start_date=start_date,
+            end_date=end_date,
+            baseline_txn_count=config.UPI_BASELINE_TXN_COUNT,
+            baseline_txn_value=config.UPI_BASELINE_TXN_VALUE,
+            seed=config.UPI_SIMULATOR_SEED
+        )
+        return upi_df
+    else:
+        # CSV fallback (existing logic)
+        logger.info("Using CSV fallback for UPI data")
+        return load_upi_data_from_csv(str(config.UPI_DATA_FILE))
+
+# Convenience functions
+def load_upi_csv(csv_path: str) -> pd.DataFrame:
+    """
+    Convenience function to load UPI data from CSV
+    
+    Args:
+        csv_path: Path to UPI CSV file
+        
+    Returns:
+        UPI DataFrame
+    """
+    return load_upi_data_from_csv(csv_path)

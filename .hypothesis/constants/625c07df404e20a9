@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\rates.py
-# hypothesis_version: 6.148.5
-
-[0.0, 1e-20, 1e-15, 1e-13, 1e-08, 0.01, 0.025, 0.05, 0.25, 0.5, 0.95, 1.0, 8.0, 100, '-score', '2-sided', '2s', 'Poisson', 'alt', 'binomial', 'cond-midp', 'confint', 'diff', 'etest', 'etest-score', 'etest-wald', 'exact-c', 'exact-cond', 'ftotal', 'gamma', 'invalid alternative', 'jeff', 'l', 'larger', 'midp-c', 'mover', 'normal', 'poisson', 'power', 'ratio', 's', 'score', 'score-log', 'smaller', 'sqrt', 'sqrt-a', 'sqrt-cent', 'sqrt-centcc', 'sqrt-v', 'sqrtcc', 'test', 'two-sided', 'unknown method %s', 'wald', 'wald-log', 'waldcc', 'waldccv']

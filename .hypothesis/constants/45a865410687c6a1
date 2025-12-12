@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\arima\params.py
-# hypothesis_version: 6.148.5
-
-[', ', 'AR coefficients', 'AR polynomial', 'MA coefficients', 'MA polynomial', 'SARIMAXParams(%s)', 'ar=%s', 'ar_params', 'constant', 'exog=%s', 'exog_params', 'ma=%s', 'ma_params', 'seasonal_ar=%s', 'seasonal_ar_params', 'seasonal_ma=%s', 'seasonal_ma_params', 'sigma2', 'sigma2=%s']

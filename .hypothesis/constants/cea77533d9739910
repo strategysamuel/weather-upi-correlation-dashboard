@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\deterministic.py
-# hypothesis_version: 6.148.5
-
-[' and ', ',', ', ', '-', '2000-1-1', '2020-01-01', 'A', 'B', 'Calendar', 'CalendarTimeTrend', 'Constant', 'D', 'Empty', 'H', 'M', 'ME', 'MS', 'Q', 'QE', 'Seasonality', 'TimeTrend', 'W', 'Y', 'YE', 'a ', 'c', 'const', 'constant', 'cos', 'drop', 'fourier', 'freq', 'h', 'initial_period', 'order', 'period', 'period must be >= 2', 'r', 'seasonal', 'sin', 'start', 'steps', 'stop', 't', 'terms', 'trend', 'trend_cubed', 'trend_squared', 'tt']

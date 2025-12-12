@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\graphics\api.py
-# hypothesis_version: 6.148.5
-
-['abline_plot', 'beanplot', 'fboxplot', 'hdrboxplot', 'influence_plot', 'interaction_plot', 'mean_diff_plot', 'plot_ccpr', 'plot_ccpr_grid', 'plot_corr', 'plot_corr_grid', 'plot_fit', 'plot_leverage_resid2', 'plot_partregress', 'plot_regress_exog', 'qqplot', 'rainbow', 'rainbowplot', 'tsa', 'violinplot']

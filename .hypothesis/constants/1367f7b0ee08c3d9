@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\nonparametric\api.py
-# hypothesis_version: 6.148.5
-
-['EstimatorSettings', 'KDEMultivariate', 'KDEUnivariate', 'KernelCensoredReg', 'KernelReg', 'bandwidths', 'cdf_kernel_asym', 'lowess', 'pdf_kernel_asym']

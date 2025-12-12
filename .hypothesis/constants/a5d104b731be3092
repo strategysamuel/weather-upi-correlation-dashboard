@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\anova.py
-# hypothesis_version: 6.148.5
-
-['*', ', Sum)', ':', 'Anova', 'C', 'C(', 'C(%s, Sum)', 'Data is unbalanced.', 'Den DF', 'F', 'F Value', 'I', 'II', 'III', 'IV', 'Intercept', 'Num DF', 'PR(>%s)', 'Pr > F', 'Pr(>%s)', 'Residual', '__main__', 'conformity', 'df', 'df_diff', 'df_resid', 'effects', 'fcategory', 'fscore', 'hc0', 'hc1', 'hc2', 'hc3', 'mean', 'mean_sq', 'moore.csv', 'partner_status', 'robust', 'scale', 'ss_diff', 'ssr', 'sum_sq', 'test', 'typ']

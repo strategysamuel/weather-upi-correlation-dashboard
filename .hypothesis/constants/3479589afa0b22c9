@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\formula\api.py
-# hypothesis_version: 6.148.5
-
-['conditional_logit', 'conditional_mnlogit', 'conditional_poisson', 'gee', 'glm', 'glmgam', 'gls', 'glsar', 'logit', 'mixedlm', 'mnlogit', 'negativebinomial', 'nominal_gee', 'ols', 'ordinal_gee', 'phreg', 'poisson', 'probit', 'quantreg', 'rlm', 'wls']

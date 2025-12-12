@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tools\typing.py
-# hypothesis_version: 6.148.5
-
-['1.22.0', 'ArrayLike', 'ArrayLike1D', 'ArrayLike2D', 'DTypeLike', 'Float64Array', 'NDArray', 'NumericArray']

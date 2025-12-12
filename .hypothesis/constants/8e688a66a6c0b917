@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\streamlit\watcher\local_sources_watcher.py
-# hypothesis_version: 6.148.5
-
-['**/*', 'Path changed: %s', '_NamespacePath', '__file__', '__path__', '__spec__', '_path', 'script_path']

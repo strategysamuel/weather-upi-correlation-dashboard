@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\power.py
-# hypothesis_version: 6.148.5
-
-[1e-12, 1e-08, 0.0001, 0.01, 0.05, 0.15, 0.6, 0.9, 1.0, 2.0, 10.0, 50.0, 500, '2s', 'Effect Size', 'N=%4.2F', 'Power of Test', 'alpha', 'df_denom', 'df_num', 'effect size', 'effect_size', 'es', 'es=%4.2F', 'fvec', 'larger', 'lower right', 'nobs', 'nobs is not used', 'nobs1', "or 'smaller'", 'power', 'ratio', 'smaller', 'two-sided']

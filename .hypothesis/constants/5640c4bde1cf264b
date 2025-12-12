@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\robust\robust_linear_model.py
-# hypothesis_version: 6.148.5
-
-[0.0, 1e-08, 0.05, '%.4f', '%d', 'Cov Type:', 'Date:', 'Dep. Variable:', 'Df Model:', 'Df Residuals:', 'H1', 'H2', 'H3', 'IRLS', 'Method:', 'Model:', 'No. Iterations:', 'No. Observations:', 'Norm:', 'RLM', 'Scale Est.:', 'Time:', 'coefs', 'cov', 'dev', 'deviance', 'iteration', 'mad', 'none', 'norm', 'params', 'pinv_wexog', 'scale', 'scale_est', 'sresid', 'text', 'weights']

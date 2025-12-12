@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\streamlit\runtime\context.py
-# hypothesis_version: 6.148.5
-
-['-', '127.0.0.1', '::1', 'RequestHandler', 'context.cookies', 'context.headers', 'context.ip_address', 'context.is_embedded', 'context.locale', 'context.theme', 'context.timezone', 'context.url', 'dark', 'light', 'type']

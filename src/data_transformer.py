@@ -10,6 +10,12 @@ import numpy as np
 from typing import Dict, List, Tuple, Optional
 import logging
 import re
+import sys
+from pathlib import Path
+
+# Add project root to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from upi_simulator import apply_weather_influence
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -424,14 +430,14 @@ class DataTransformer:
     
     def transform_and_merge(self, weather_df: pd.DataFrame, upi_df: pd.DataFrame) -> pd.DataFrame:
         """
-        Complete transformation pipeline: standardize columns, normalize dates, and merge
+        Complete transformation pipeline: standardize columns, normalize dates, and merge with weather influence
         
         Args:
             weather_df: Raw weather DataFrame
             upi_df: Raw UPI DataFrame
             
         Returns:
-            Fully transformed and merged DataFrame
+            Fully transformed and merged DataFrame with weather influence applied
         """
         logger.info("Starting complete transformation pipeline")
         
@@ -440,8 +446,8 @@ class DataTransformer:
             weather_standardized = self.standardize_columns(weather_df, 'weather')
             upi_standardized = self.standardize_columns(upi_df, 'upi')
             
-            # Step 2: Merge datasets (normalize_dates is called within merge_datasets)
-            merged_df = self.merge_datasets(weather_standardized, upi_standardized)
+            # Step 2: Apply weather influence to UPI data and merge
+            merged_df = apply_weather_influence(upi_standardized, weather_standardized)
             
             logger.info("Transformation pipeline completed successfully")
             return merged_df

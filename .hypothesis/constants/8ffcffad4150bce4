@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\streamlit\watcher\folder_black_list.py
-# hypothesis_version: 6.148.5
-
-['**/.*', '**/anaconda', '**/anaconda2', '**/anaconda3', '**/dist-packages', '**/htmlcov', '**/miniconda', '**/miniconda2', '**/miniconda3', '**/node_modules', '**/pyenv', '**/site-packages', '**/venv', '**/virtualenv']

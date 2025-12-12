@@ -1,31 +1,31 @@
-date,city,avg_temp_c,humidity_pct,rain_mm,source,total_upi_txn_count,avg_txn_value_inr,notes
-2024-11-01,Mumbai,28.0,60.0,0.3,api,5124983,778.61,Synthetic demo data for KIRO Week 3 project
-2024-11-02,Mumbai,28.75,60.0,0.0,api,5049313,733.25,Synthetic demo data for KIRO Week 3 project
-2024-11-03,Mumbai,28.349999999999998,60.0,0.0,api,4913488,825.71,Synthetic demo data for KIRO Week 3 project
-2024-11-04,Mumbai,28.55,60.0,0.0,api,5066194,810.08,Synthetic demo data for KIRO Week 3 project
-2024-11-05,Mumbai,28.6,60.0,0.0,api,4839144,811.64,Synthetic demo data for KIRO Week 3 project
-2024-11-06,Mumbai,27.95,60.0,0.0,api,5022617,743.62,Synthetic demo data for KIRO Week 3 project
-2024-11-07,Mumbai,27.65,60.0,0.0,api,4561887,836.11,Synthetic demo data for KIRO Week 3 project
-2024-11-08,Mumbai,28.1,60.0,0.0,api,4895819,723.93,Synthetic demo data for KIRO Week 3 project
-2024-11-09,Mumbai,28.150000000000002,60.0,0.0,api,4941184,803.47,Synthetic demo data for KIRO Week 3 project
-2024-11-10,Mumbai,27.799999999999997,60.0,0.0,api,4615630,867.62,Synthetic demo data for KIRO Week 3 project
-2024-11-11,Mumbai,28.2,60.0,0.0,api,4846947,740.38,Synthetic demo data for KIRO Week 3 project
-2024-11-12,Mumbai,28.0,60.0,0.0,api,4950859,757.35,Synthetic demo data for KIRO Week 3 project
-2024-11-13,Mumbai,29.2,60.0,0.0,api,4795467,783.99,Synthetic demo data for KIRO Week 3 project
-2024-11-14,Mumbai,29.3,60.0,0.0,api,4902265,759.86,Synthetic demo data for KIRO Week 3 project
-2024-11-15,Mumbai,29.6,60.0,0.3,api,4714552,717.97,Synthetic demo data for KIRO Week 3 project
-2024-11-16,Mumbai,30.0,60.0,0.0,api,4896497,782.74,Synthetic demo data for KIRO Week 3 project
-2024-11-17,Mumbai,30.85,60.0,0.0,api,4948593,737.51,Synthetic demo data for KIRO Week 3 project
-2024-11-18,Mumbai,29.6,60.0,0.0,api,4879658,798.94,Synthetic demo data for KIRO Week 3 project
-2024-11-19,Mumbai,28.1,60.0,0.0,api,4975807,743.22,Synthetic demo data for KIRO Week 3 project
-2024-11-20,Mumbai,27.650000000000002,60.0,0.0,api,4938496,842.0,Synthetic demo data for KIRO Week 3 project
-2024-11-21,Mumbai,27.35,60.0,0.0,api,5274996,748.67,Synthetic demo data for KIRO Week 3 project
-2024-11-22,Mumbai,26.9,60.0,0.0,api,4958308,767.12,Synthetic demo data for KIRO Week 3 project
-2024-11-23,Mumbai,26.9,60.0,0.0,api,4670005,812.54,Synthetic demo data for KIRO Week 3 project
-2024-11-24,Mumbai,27.450000000000003,60.0,0.0,api,4988833,730.77,Synthetic demo data for KIRO Week 3 project
-2024-11-25,Mumbai,27.25,60.0,0.0,api,4677094,789.1,Synthetic demo data for KIRO Week 3 project
-2024-11-26,Mumbai,26.6,60.0,0.0,api,4802448,832.29,Synthetic demo data for KIRO Week 3 project
-2024-11-27,Mumbai,26.6,60.0,0.0,api,5009035,715.7,Synthetic demo data for KIRO Week 3 project
-2024-11-28,Mumbai,26.1,60.0,0.0,api,5369486,787.39,Synthetic demo data for KIRO Week 3 project
-2024-11-29,Mumbai,25.95,60.0,0.0,api,4969561,790.4,Synthetic demo data for KIRO Week 3 project
-2024-11-30,Mumbai,25.75,60.0,0.0,api,5045232,811.27,Synthetic demo data for KIRO Week 3 project
+date,city,avg_temp_c,humidity_pct,rain_mm,condition,source_x,total_upi_txn_count,avg_txn_value_inr,notes,source_y,source
+2025-11-12,Mumbai,27.15,60.0,0.0,Clear,api,4784512,824.09,Simulated UPI (seed=12345),simulated,simulated
+2025-11-13,Mumbai,27.75,60.0,0.0,Clear,api,5194785,825.44,Simulated UPI (seed=12345),simulated,simulated
+2025-11-14,Mumbai,27.3,60.0,0.0,Clear,api,4881154,782.44,Simulated UPI (seed=12345),simulated,simulated
+2025-11-15,Mumbai,27.15,60.0,0.0,Clear,api,4491836,776.4,Simulated UPI (seed=12345),simulated,simulated
+2025-11-16,Mumbai,27.05,60.0,0.0,Clear,api,4523133,771.51,Simulated UPI (seed=12345),simulated,simulated
+2025-11-17,Mumbai,26.75,60.0,0.0,Clear,api,4921302,818.35,Simulated UPI (seed=12345),simulated,simulated
+2025-11-18,Mumbai,26.1,60.0,0.0,Clear,api,4833388,823.27,Simulated UPI (seed=12345),simulated,simulated
+2025-11-19,Mumbai,25.85,60.0,0.0,Clear,api,5145495,789.36,Simulated UPI (seed=12345),simulated,simulated
+2025-11-20,Mumbai,26.45,60.0,0.0,Clear,api,5109022,775.8,Simulated UPI (seed=12345),simulated,simulated
+2025-11-21,Mumbai,27.049999999999997,60.0,0.0,Clear,api,4764789,811.59,Simulated UPI (seed=12345),simulated,simulated
+2025-11-22,Mumbai,27.95,60.0,0.0,Clear,api,4893380,813.1,Simulated UPI (seed=12345),simulated,simulated
+2025-11-23,Mumbai,28.4,60.0,0.0,Clear,api,4710800,802.54,Simulated UPI (seed=12345),simulated,simulated
+2025-11-24,Mumbai,28.3,60.0,0.0,Clear,api,4966628,836.14,Simulated UPI (seed=12345),simulated,simulated
+2025-11-25,Mumbai,28.5,60.0,0.0,Clear,api,5227199,803.47,Simulated UPI (seed=12345),simulated,simulated
+2025-11-26,Mumbai,28.5,60.0,0.0,Clear,api,5025088,804.11,Simulated UPI (seed=12345),simulated,simulated
+2025-11-27,Mumbai,28.75,60.0,0.0,Clear,api,5094225,779.15,Simulated UPI (seed=12345),simulated,simulated
+2025-11-28,Mumbai,28.1,60.0,0.0,Clear,api,5231495,808.88,Simulated UPI (seed=12345),simulated,simulated
+2025-11-29,Mumbai,28.15,60.0,0.0,Clear,api,4441844,837.96,Simulated UPI (seed=12345),simulated,simulated
+2025-11-30,Mumbai,26.3,60.0,0.0,Clear,api,4702059,806.73,Simulated UPI (seed=12345),simulated,simulated
+2025-12-01,Mumbai,26.15,60.0,0.0,Clear,api,5347028,806.93,Simulated UPI (seed=12345),simulated,simulated
+2025-12-02,Mumbai,26.2,60.0,0.0,Clear,api,5342536,815.65,Simulated UPI (seed=12345),simulated,simulated
+2025-12-03,Mumbai,26.85,60.0,0.0,Clear,api,5099459,812.03,Simulated UPI (seed=12345),simulated,simulated
+2025-12-04,Mumbai,27.9,60.0,0.0,Clear,api,5292334,818.31,Simulated UPI (seed=12345),simulated,simulated
+2025-12-05,Mumbai,28.700000000000003,60.0,0.0,Clear,api,4908782,818.62,Simulated UPI (seed=12345),simulated,simulated
+2025-12-06,Mumbai,28.25,60.0,0.0,Clear,api,4638160,820.49,Simulated UPI (seed=12345),simulated,simulated
+2025-12-07,Mumbai,27.8,60.0,0.0,Clear,api,4729548,786.48,Simulated UPI (seed=12345),simulated,simulated
+2025-12-08,Mumbai,27.4,60.0,0.0,Clear,api,4972065,812.68,Simulated UPI (seed=12345),simulated,simulated
+2025-12-09,Mumbai,26.8,60.0,0.0,Clear,api,5175217,766.9,Simulated UPI (seed=12345),simulated,simulated
+2025-12-10,Mumbai,27.1,60.0,0.0,Clear,api,5463764,811.82,Simulated UPI (seed=12345),simulated,simulated
+2025-12-11,Mumbai,26.8,60.0,0.0,Clear,api,5610590,775.08,Simulated UPI (seed=12345),simulated,simulated

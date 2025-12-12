@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 # Import pipeline modules
 from weather_api import get_weather_data, get_weather_for_range
-from data_loader import load_upi_csv
+from data_loader import load_upi_csv, load_upi_data
 from data_validator import validate_datasets
 from data_transformer import DataTransformer
 from analytics_engine import analyze_weather_upi_correlations
@@ -59,9 +59,16 @@ class WeatherUPIPipeline:
         self.logger.info("=" * 60)
         
         try:
+            # Use last 30 days automatically
+            from datetime import date, timedelta
+            end_date = date.today() - timedelta(days=1)
+            start_date = end_date - timedelta(days=29)
+            
+            self.logger.info(f"Fetching weather data for last 30 days: {start_date} to {end_date}")
+            
             weather_df, source = get_weather_for_range(
-                start_date="2024-11-01",
-                end_date="2024-11-30",
+                start_date=start_date.strftime('%Y-%m-%d'),
+                end_date=end_date.strftime('%Y-%m-%d'),
                 allow_fallback=True
             )
             if weather_df is None:
@@ -78,9 +85,9 @@ class WeatherUPIPipeline:
             self.logger.error(f"Failed to fetch weather data: {e}")
             raise
     
-    def load_upi_data(self):
+    def load_upi_data(self, start_date="2024-11-01", end_date="2024-11-30"):
         """
-        Step 2: Load UPI transaction data from CSV
+        Step 2: Load UPI transaction data using simulator or CSV fallback
         
         Requirements: 1.1, 1.2
         """
@@ -89,15 +96,23 @@ class WeatherUPIPipeline:
         self.logger.info("=" * 60)
         
         try:
-            # Load UPI data from CSV
-            upi_df = load_upi_csv(str(config.UPI_DATA_FILE))
+            # Import the new load_upi_data function
+            from data_loader import load_upi_data
+            
+            # Load UPI data using simulator or CSV fallback
+            upi_df = load_upi_data(start_date, end_date)
             
             if upi_df.empty:
-                raise ValueError("No UPI data loaded from CSV file")
+                raise ValueError("No UPI data loaded")
             
             self.results['upi_data'] = upi_df
             self.logger.info(f"Successfully loaded {len(upi_df)} UPI transaction records")
             self.logger.info(f"UPI data columns: {list(upi_df.columns)}")
+            
+            # Log data source
+            if 'source' in upi_df.columns:
+                source = upi_df['source'].iloc[0]
+                self.logger.info(f"UPI data source: {source}")
             
             return upi_df
             
@@ -313,11 +328,19 @@ class WeatherUPIPipeline:
         self.logger.info(f"Pipeline started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         try:
+            # Calculate date range for the pipeline
+            from datetime import date, timedelta
+            end_date = date.today() - timedelta(days=1)
+            start_date = end_date - timedelta(days=29)
+            
             # Step 1: Fetch weather data
             weather_df = self.fetch_weather_data()
             
-            # Step 2: Load UPI data
-            upi_df = self.load_upi_data()
+            # Step 2: Load UPI data using same date range
+            upi_df = self.load_upi_data(
+                start_date=start_date.strftime('%Y-%m-%d'),
+                end_date=end_date.strftime('%Y-%m-%d')
+            )
             
             # Step 3: Validate data
             self.validate_data(weather_df, upi_df)
@@ -389,6 +412,12 @@ Examples:
         help='Enable silent fallback to CSV if live API fails'
     )
     
+    parser.add_argument(
+        '--upi-live',
+        action='store_true',
+        help='Use UPI simulator instead of CSV data'
+    )
+    
     return parser.parse_args()
 
 def configure_from_args(args):
@@ -397,22 +426,27 @@ def configure_from_args(args):
         config.USE_LIVE_WEATHER = True
         config.ALLOW_CSV_FALLBACK = False
         config.INTERACTIVE_FALLBACK_PROMPT = False
-        print("🔴 Live-only mode: CSV fallback disabled")
+        print("Live-only mode: CSV fallback disabled")
         
     elif args.csv_only:
         config.USE_LIVE_WEATHER = False
         config.ALLOW_CSV_FALLBACK = True
         config.INTERACTIVE_FALLBACK_PROMPT = False
-        print("📁 CSV-only mode: Live API disabled")
+        print("CSV-only mode: Live API disabled")
         
     elif args.silent_fallback:
         config.USE_LIVE_WEATHER = True
         config.ALLOW_CSV_FALLBACK = True
         config.INTERACTIVE_FALLBACK_PROMPT = False
-        print("🔄 Live-first with silent fallback mode")
+        print("Live-first with silent fallback mode")
         
     else:
-        print("🌐 Live-first with interactive fallback mode (default)")
+        print("Live-first with interactive fallback mode (default)")
+    
+    # Configure UPI simulator
+    if args.upi_live:
+        config.USE_UPI_SIMULATOR = True
+        print("UPI simulator mode enabled")
 
 def main():
     """Main pipeline execution function"""

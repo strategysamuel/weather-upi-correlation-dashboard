@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\streamlit\connections\sql_connection.py
-# hypothesis_version: 6.148.5
-
-['.', 'AUTOCOMMIT', 'DataFrame', 'Engine', '_', 'create_engine_kwargs', 'database', 'dialect', 'driver', 'host', 'password', 'port', 'query', 'str', 'url', 'username']

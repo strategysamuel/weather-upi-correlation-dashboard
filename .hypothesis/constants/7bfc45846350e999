@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tsa\arima\specification.py
-# hypothesis_version: 6.148.5
-
-[0.5, ', ', 'AR', 'AR terms', 'Burg', 'Hannan-Rissanen', 'Innovations', 'Innovations MLE', 'MA', 'MA terms', 'State space', 'Yule-Walker', 'ar.L%d', 'ar.S.L%d', 'ar_params', 'burg', 'concentrate_scale=%s', 'const', 'drift', 'endog=%s', 'exog=%s', 'exog_params', 'exogenous variables', 'hannan_rissanen', 'innovations', 'innovations_mle', 'joint parameters', 'ma.L%d', 'ma.S.L%d', 'ma_params', 'none', 'order=%s', 'seasonal AR', 'seasonal AR terms', 'seasonal MA', 'seasonal MA terms', 'seasonal_ar_params', 'seasonal_ma_params', 'seasonal_order=%s', 'sigma2', 'statespace', 'trend.%d', 'variance', 'yule_walker']

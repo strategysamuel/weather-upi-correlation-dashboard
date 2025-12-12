@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\nonparametric\kernel_regression.py
-# hypothesis_version: 6.148.5
-
-[-1.0, 0.5, 0.9, 0.95, 0.99, 1.0, 1.06, 2.0, 1000.0, 400, '*', '**', '***', 'Estimator type: ', 'KernelCensoredReg', 'KernelReg', 'KernelReg instance\n', 'Not Significant', 'aitchison_aitken_reg', 'aitchisonaitken', 'cv_ls', 'd_gaussian', 'gaussian', 'll', 'user-specified', 'wangryzin', 'wangryzin_reg']

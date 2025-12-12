@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\regression\recursive_ls.py
-# hypothesis_version: 6.148.5
-
-[-1.2365861, -1.0847745, -0.8858694, -0.7351697, -0.6703724, -0.6702672, -0.6701218, -0.6700069, -0.6698868, -0.5816458, 0.005, 0.01, 0.025, 0.05, 0.1, 0.2, 0.3, 0.5, 0.948, 0.95, 1.0, 1.072983, 1.143, 1.2238734, 1.3581015, 1.5, 1.5174271, 1.6276236, 2.0, 100, '%d%% significance', 'CUSUM', 'CUSUM of squares', 'custom', 'custom_cov_params', 'custom_cov_type', 'custom_description', 'dates', 'design', 'design_info', 'diffuse', 'forecasts', 'forecasts_error', 'forecasts_error_cov', 'formula', 'initialization', 'k', 'k--', 'k_constraints', 'k_exog', 'missing', 'missing_idx', 'none', 'nonrobust', 'obs_cov', 'opg', 'predicted', 'transition', 'upper left']

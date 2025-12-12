@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\genmod\families\links.py
-# hypothesis_version: 6.148.5
-
-[-2.0, -1.0, 0.5, 1.0, 'CLogLog', 'Cauchy', 'Identity', 'InversePower', 'InverseSquared', 'Log', 'LogC', 'LogLog', 'Logit', 'NegativeBinomial', 'Probit', 'Sqrt', 'cauchy', 'cloglog', 'identity', 'inverse_power', 'inverse_squared', 'log', 'logc', 'logit', 'loglog', 'nbinom', 'probit', 'sqrt']

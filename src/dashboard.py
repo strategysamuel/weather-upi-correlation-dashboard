@@ -26,8 +26,8 @@ project_root = current_dir.parent
 sys.path.insert(0, str(project_root))
 
 import config
-from weather_api import get_weather_data, request_csv_fallback, PipelineError, FallbackPending, WeatherAPIClient, fetch_open_meteo
-from data_loader import load_upi_csv, load_weather_csv
+from weather_api import get_weather_data, request_csv_fallback, PipelineError, FallbackPending, WeatherAPIClient
+from data_loader import load_upi_csv, load_weather_csv, load_upi_data
 from data_transformer import DataTransformer
 from analytics_engine import analyze_weather_upi_correlations
 import statsmodels.api as sm
@@ -468,19 +468,20 @@ class WeatherUPIDashboard:
     
     def render_sidebar_controls(self):
         """Render sidebar controls for date selection and options"""
+        from datetime import date, timedelta
         # defaults: last 30 days
-        yesterday = (pd.Timestamp.utcnow().date() - pd.Timedelta(days=1))
-        default_end = yesterday
-        default_start = default_end - pd.Timedelta(days=29)
+        today = date.today() - timedelta(days=1)
+        default_start = today - timedelta(days=29)
         
         st.sidebar.header("Controls")
-        start_date = st.sidebar.date_input("Start Date", value=default_start, max_value=default_end)
-        end_date = st.sidebar.date_input("End Date", value=default_end, min_value=start_date, max_value=default_end)
+        start_date = st.sidebar.date_input("Start Date", value=default_start, max_value=today)
+        end_date = st.sidebar.date_input("End Date", value=today, min_value=start_date, max_value=today)
         
         st.sidebar.markdown("---")
         st.sidebar.subheader("Data Source Options")
         try_live = st.sidebar.checkbox("Try live API first", value=True)
         auto_fallback = st.sidebar.checkbox("Auto fallback to CSV (no prompt)", value=False)
+        upi_simulator = st.sidebar.checkbox("UPI Live Simulator mode", value=True)
         
         st.sidebar.markdown("---")
         st.sidebar.subheader("Auto Refresh")
@@ -488,16 +489,28 @@ class WeatherUPIDashboard:
         
         fetch_btn = st.sidebar.button("🚀 Fetch data for selected range")
         
-        return start_date, end_date, try_live, auto_fallback, refresh_interval, fetch_btn
+        return start_date, end_date, try_live, auto_fallback, upi_simulator, refresh_interval, fetch_btn
     
     def render_data_source_badge(self):
-        """Render data source badge"""
+        """Render data source badges for both weather and UPI data"""
         weather_source = st.session_state.get("weather_source", "unknown")
         
+        # Weather source badge
         if weather_source == "api":
-            st.success("📡 **Data source: LIVE (API)**")
+            st.success("📡 **Weather Source:** LIVE API")
         elif weather_source == "csv":
-            st.warning("📁 **Data source: CSV (fallback)**")
+            st.warning("📁 **Weather Source:** CSV (fallback)")
+        else:
+            st.info("❓ No data loaded yet. Click 'Fetch data for selected range' in the sidebar.")
+        
+        # UPI source badge if data is loaded
+        weather_df = st.session_state.get("weather_df")
+        if weather_df is not None and len(weather_df) > 0 and 'source' in weather_df.columns:
+            upi_source = weather_df['source'].iloc[0] if len(weather_df) > 0 else 'unknown'
+            if upi_source == 'simulated':
+                st.info("🎲 **UPI Source:** SIMULATED")
+            elif upi_source == 'csv':
+                st.warning("📁 **UPI Source:** CSV")
         else:
             st.info("❓ **Data source: UNKNOWN**")
     
@@ -531,12 +544,17 @@ class WeatherUPIDashboard:
             return None, None
         
         try:
-            # Load UPI data
-            upi_df = load_upi_csv(str(config.UPI_DATA_FILE))
+            # Get date range from weather data
+            weather_df = st.session_state["weather_df"]
+            start_date = weather_df['date'].min().strftime('%Y-%m-%d')
+            end_date = weather_df['date'].max().strftime('%Y-%m-%d')
+            
+            # Load UPI data using simulator for the same date range
+            upi_df = load_upi_data(start_date, end_date)
             
             # Transform and merge
             transformer = DataTransformer()
-            merged_df = transformer.transform_and_merge(st.session_state["weather_df"], upi_df)
+            merged_df = transformer.transform_and_merge(weather_df, upi_df)
             
             # Perform analytics
             analytics_results = analyze_weather_upi_correlations(merged_df)
@@ -561,6 +579,16 @@ class WeatherUPIDashboard:
         
         st.subheader("📊 Data Preview")
         
+        # Show data source labels
+        weather_source = st.session_state.get("weather_source", "unknown")
+        if 'source' in merged_df.columns:
+            upi_source = merged_df['source'].iloc[0] if len(merged_df) > 0 else "unknown"
+        else:
+            upi_source = "unknown"
+        
+        st.markdown(f"**Weather Source:** {weather_source.upper()}")
+        st.markdown(f"**UPI Source:** {upi_source.upper()}")
+        
         # Show data summary
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -568,16 +596,27 @@ class WeatherUPIDashboard:
         with col2:
             st.metric("Date Range", f"{len(merged_df)} days")
         with col3:
-            weather_source = st.session_state.get("weather_source", "unknown")
             st.metric("Weather Source", weather_source.upper())
         with col4:
-            if 'source' in merged_df.columns:
-                api_count = (merged_df['source'] == 'api').sum()
-                csv_count = (merged_df['source'] == 'csv').sum()
-                st.metric("API/CSV Split", f"{api_count}/{csv_count}")
+            st.metric("UPI Source", upi_source.upper())
         
-        # Show sample data
-        st.dataframe(merged_df.head(10), use_container_width=True)
+        # Show data with pagination options
+        st.subheader("📋 Data Table")
+        
+        # Add display options
+        col1, col2 = st.columns([1, 3])
+        with col1:
+            show_all = st.checkbox("Show all records", value=False)
+            if not show_all:
+                num_rows = st.selectbox("Rows to display", [10, 20, 50], index=0)
+        
+        # Display data based on selection
+        if show_all:
+            st.dataframe(merged_df, use_container_width=True)
+            st.info(f"Showing all {len(merged_df)} records")
+        else:
+            st.dataframe(merged_df.head(num_rows), use_container_width=True)
+            st.info(f"Showing first {min(num_rows, len(merged_df))} of {len(merged_df)} total records")
     
     def generate_automated_insights(self, data):
         """Generate automated insights from correlation analysis"""
@@ -787,8 +826,8 @@ class WeatherUPIDashboard:
     def do_fetch(self, start_date, end_date, try_live, auto_fallback):
         """Handle data fetching logic"""
         # Import here to avoid circular imports
-        from .weather_api import fetch_open_meteo
-        from .data_loader import load_weather_csv
+        from weather_api import fetch_open_meteo
+        from data_loader import load_weather_csv
         
         # Attempt live (if selected) else CSV
         if try_live:

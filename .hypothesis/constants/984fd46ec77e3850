@@ -1,4 +1,0 @@
-# file: D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_validator.py
-# hypothesis_version: 6.148.5
-
-[100, 1000, '-', '1900-01-01', '2030-12-31', '=', 'FAILED', 'PASSED', 'SUMMARY:\n', 'UPI', 'UPI dataset is empty', 'avg_temp_c', 'avg_txn_value_inr', 'city', 'count', 'date', 'humidity_pct', 'inf', 'percentage', 'rain_mm', 'total_upi_txn_count', 'weather']

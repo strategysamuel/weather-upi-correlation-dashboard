@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\inter_rater.py
-# hypothesis_version: 6.148.5
-
-[1e-14, 0.025, 0.5, 1.0, 100, 200, '%4.1f', '%4d', '%r', 'Simple', 'Weighted', 'alpha', 'alpha_ci', 'ca', 'distribution_kappa', 'fc', 'fleiss', 'kappa', 'kappa_low', 'kappa_upp', 'linear', 'pvalue_one_sided', 'pvalue_two_sided', 'quadratic', 'rand', 'std_kappa', 'std_kappa0', 'toeplitz', 'unif', 'var_kappa', 'var_kappa0', 'z_value']

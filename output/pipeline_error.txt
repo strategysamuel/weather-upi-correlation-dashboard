@@ -1,15 +1,9 @@
-Pipeline execution failed at: 2025-12-12 09:05:28
-Error: UPI CSV file not found: nonexistent_upi.csv
+Pipeline execution failed at: 2025-12-12 11:50:42
+Error: name 'start_date' is not defined
 
 Full traceback:
 Traceback (most recent call last):
-  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\main.py", line 320, in run_pipeline
-    upi_df = self.load_upi_data()
-  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\main.py", line 93, in load_upi_data
-    upi_df = load_upi_csv(str(config.UPI_DATA_FILE))
-  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_loader.py", line 238, in load_upi_csv
-    return loader.load_upi_data(csv_path)
-           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
-  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_loader.py", line 40, in load_upi_data
-    raise FileNotFoundError(f"UPI CSV file not found: {csv_path}")
-FileNotFoundError: UPI CSV file not found: nonexistent_upi.csv
+  File "D:\SAMUEL\Kiro-Projects\weather-upi-insights\main.py", line 336, in run_pipeline
+    start_date=start_date.strftime('%Y-%m-%d'),
+               ^^^^^^^^^^
+NameError: name 'start_date' is not defined

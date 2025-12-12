@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\compat\python.py
-# hypothesis_version: 6.148.5
-
-['PYTHON_IMPL_WASM', 'asbytes', 'asstr', 'asunicode', 'emscripten', 'latin1', 'lfilter', 'lmap', 'lrange', 'lzip', 'temporary_class', 'wasm32', 'wasm64', 'with_metaclass']

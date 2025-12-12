@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\base\l1_slsqp.py
-# hypothesis_version: 6.148.5
-
-[1e-12, 1000, 'F', 'acc', 'alpha_rescaled', 'auto_trim_tol', 'converged', 'fopt', 'gopt', 'hopt', 'iterations', 'nan', 'qc_tol', 'qc_verbose', 'size_trim_tol', 'trim_mode', 'trimmed', 'warnflag']

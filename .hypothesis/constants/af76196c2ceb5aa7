@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\cachetools\__init__.py
-# hypothesis_version: 6.148.5
-
-['%s is empty', '6.2.1', 'Cache', 'CacheInfo', 'FIFOCache', 'LFUCache', 'LRUCache', 'RRCache', 'TLRUCache', 'TTLCache', 'cached', 'cachedmethod', 'count', 'currsize', 'expires', 'hits', 'key', 'keys', 'maxsize', 'misses', 'next', 'prev', 'removed', 'value too large']

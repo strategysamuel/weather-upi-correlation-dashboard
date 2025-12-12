@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\plotly\graph_objs\scatter\__init__.py
-# hypothesis_version: 6.148.5
-
-['._error_x.ErrorX', '._error_y.ErrorY', '._line.Line', '._marker.Marker', '._selected.Selected', '._stream.Stream', '._textfont.Textfont', '.hoverlabel', '.legendgrouptitle', '.marker', '.selected', '.unselected']

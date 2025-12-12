@@ -112,7 +112,9 @@ def fetch_open_meteo(lat=19.07, lon=72.88, start_date=None, end_date=None, timez
     df["city"] = "Mumbai"
     # humidity not provided by this endpoint — default 60%
     df["humidity_pct"] = 60.0
-    df = df[["date", "city", "avg_temp_c", "humidity_pct", "rain_mm"]]
+    # Add condition column based on rain
+    df["condition"] = df["rain_mm"].apply(lambda x: "Rainy" if x > 0 else "Clear")
+    df = df[["date", "city", "avg_temp_c", "humidity_pct", "rain_mm", "condition"]]
     df["source"] = "api"
     
     logger.info("Open-Meteo parsed %d rows for %s->%s", len(df), params["start_date"], params["end_date"])
@@ -558,11 +560,19 @@ def get_weather_for_range(start_date=None, end_date=None, allow_fallback=True):
         logger.info("Live API returned no rows or failed.")
         if allow_fallback:
             logger.info("Loading fallback CSV")
-            from .data_loader import load_weather_csv
-            df_csv = load_weather_csv("weather_mumbai_2024_11_synthetic.csv")
-            if df_csv is not None:
-                df_csv["source"] = "csv"
-                return df_csv, "csv"
+            try:
+                # Import here to avoid circular imports
+                import sys
+                from pathlib import Path
+                sys.path.insert(0, str(Path(__file__).parent))
+                from data_loader import load_weather_csv
+                df_csv = load_weather_csv("weather_mumbai_2024_11_synthetic.csv")
+                if df_csv is not None:
+                    df_csv["source"] = "csv"
+                    return df_csv, "csv"
+            except Exception as e:
+                logger.error(f"Failed to load CSV fallback: {e}")
+                return None, None
         return None, None
 
 def request_csv_fallback(start_date: str = None, end_date: str = None) -> pd.DataFrame:

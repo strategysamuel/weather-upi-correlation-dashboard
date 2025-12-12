@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\plotly\graph_objs\_sankey.py
-# hypothesis_version: 6.148.5
-
-['_parent', '_validate', 'arrangement', 'customdata', 'customdatasrc', 'domain', 'hoverinfo', 'hoverlabel', 'ids', 'idssrc', 'legend', 'legendgrouptitle', 'legendrank', 'legendwidth', 'link', 'meta', 'metasrc', 'name', 'node', 'orientation', 'sankey', 'selectedpoints', 'skip_invalid', 'stream', 'textfont', 'type', 'uid', 'uirevision', 'valueformat', 'valuesuffix', 'visible']

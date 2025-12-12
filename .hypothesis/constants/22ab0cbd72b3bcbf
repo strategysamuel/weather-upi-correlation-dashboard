@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\contingency_tables.py
-# hypothesis_version: 6.148.5
-
-[1e-20, 0.05, 0.5, 1.0, 2.0, '%.0f', '%.3f', '%d', 'Avg n', 'DF', 'Estimate', 'Homogeneity', 'LCB', 'Log odds ratio', 'Log risk ratio', 'Max n', 'Min n', 'Number of tables', 'Odds ratio', 'P-value', 'Pooled log odds', 'Pooled odds', 'Pooled risk ratio', 'Risk ratio', 'SE', 'Statistic', 'Symmetry', 'Test constant OR', 'Test of OR=1', 'Total n', 'UCB', 'bhapkar', 'bowker', 'normal', 'p-value', 'r', 'stuart_maxwell', 'table is empty', 'table must be square', '{:', '}   {}']

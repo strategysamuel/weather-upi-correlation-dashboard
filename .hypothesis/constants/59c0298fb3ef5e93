@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\pandas\core\arrays\_arrow_string_mixins.py
-# hypothesis_version: 6.148.5
-
-['$', '\\$', '\\\\\\d', '\\g<', '^', 'both', 'contains', 'endswith', 'left', 'right', 'startswith']

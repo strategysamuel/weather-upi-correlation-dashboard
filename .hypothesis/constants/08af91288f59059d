@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\multivariate\pca.py
-# hypothesis_version: 6.148.5
-
-[0.0, 5e-08, 0.02, 0.1, 1.0, 2.0, 100, 1000, '$R^2$', ')', ', ', ', id: ', 'Component Number', 'Demean (Covariance)', 'Eigenvalue', 'GLS, ', 'IC_p1', 'IC_p2', 'IC_p3', 'None', 'SVD', 'Scree Plot', 'bo', 'comp', 'comp_{0:0', 'data', 'demean', 'drop-col', 'drop-min', 'drop-row', 'd}', 'eig', 'eigenvals', 'eigenvec', 'fill-em', 'gls', 'int_like', 'log', 'max_em_iter', 'method: ', 'missing', 'ncomp', 'nipals', 'nobs: ', 'normalization: ', 'normalize', 'nvar: ', 'rsquare', 'standardize', 'svd', 'svd_fm', 'tol', 'tol_em', 'transformation: ', 'weights']

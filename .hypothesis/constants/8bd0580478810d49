@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\pandas\api\typing\__init__.py
-# hypothesis_version: 6.148.5
-
-['DataFrameGroupBy', 'Expanding', 'ExpandingGroupby', 'JsonReader', 'NAType', 'NaTType', 'Resampler', 'Rolling', 'RollingGroupby', 'SeriesGroupBy', 'StataReader', 'TimeGrouper', 'Window']

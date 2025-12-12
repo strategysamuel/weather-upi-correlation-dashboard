@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tools\_test_runner.py
-# hypothesis_version: 6.148.5
-
-['--tb=short', 'Running pytest ', '__file__', '__name__']

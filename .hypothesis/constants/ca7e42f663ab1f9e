@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\multivariate\cancorr.py
-# hypothesis_version: 6.148.5
-
-[1e-08, 'Cancorr results', 'Den DF', 'F Value', 'Num DF', 'Pr > F', "Wilks' lambda", 'endog is collinear.', 'exog is collinear.', 'none']

@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\stats\mediation.py
-# hypothesis_version: 6.148.5
-
-[0.05, 100, 1000, 'ACME (average)', 'ACME (control)', 'ACME (treated)', 'ADE (average)', 'ADE (control)', 'ADE (treated)', 'Estimate', 'Lower CI bound', 'P-value', 'Total effect', 'Upper CI bound', 'boot', 'coerce', 'exog', 'exposure', 'formula', 'mediator', 'outcome', 'para', 'parametric', 'scale', '~']

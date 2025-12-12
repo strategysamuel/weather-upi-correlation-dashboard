@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\narwhals\expr_list.py
-# hypothesis_version: 6.148.5
-
-['Expr', 'ExprT', 'list.contains', 'list.get', 'list.len', 'list.unique']

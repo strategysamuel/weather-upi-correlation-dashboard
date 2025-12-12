@@ -1,4 +1,0 @@
-# file: C:\Users\DELL\AppData\Roaming\Python\Python313\site-packages\statsmodels\tools\print_version.py
-# hypothesis_version: 6.148.5
-
-['\nINSTALLED VERSIONS', '    backend: %s ', '    dateutil: %s', '    jinja2: %s', '    jinja2: {} ({})', '    pygments: %s', '------------------', 'IPython: %s', 'IPython: {} ({})', 'Installed: %s', 'Installed: {} ({})', 'LANG', 'LANG: %s', 'LC_ALL', 'LC_ALL: %s', 'None', 'Not installed', '__main__', '__version__', 'backend', 'byteorder: %s', 'cvxopt: %s', 'cvxopt: {} ({})', 'cython: %s', 'cython: {} ({})', 'joblib: %s ', 'joblib: {} ({})', 'matplotlib: %s', 'matplotlib: {} ({})', 'numpy: %s', 'numpy: Not installed', 'numpy: {} ({})', 'pandas: %s', 'pandas: {} ({})', 'patsy: %s', 'patsy: Not installed', 'patsy: {} ({})', 'scipy: %s', 'scipy: Not installed', 'scipy: {} ({})', 'sphinx: %s', 'sphinx: {} ({})', 'version', 'virtualenv: %s', 'virtualenv: {} ({})']
