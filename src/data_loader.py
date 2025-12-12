@@ -189,6 +189,19 @@ class UPIDataLoader:
             logger.error(f"Error standardizing data types: {e}")
             raise
 
+def load_weather_csv(path):
+    """Load weather CSV fallback data"""
+    try:
+        df = pd.read_csv(path, parse_dates=["date"])
+        # ensure columns: date, city, avg_temp_c, humidity_pct, rain_mm
+        # If names differ, do minimal standardization here (keep it simple).
+        df["source"] = "csv"
+        logger.info("Loaded fallback CSV %s (%d rows)", path, len(df))
+        return df
+    except Exception as e:
+        logger.warning("Failed to load fallback CSV %s: %s", path, e)
+        return None
+
 def load_weather_fallback(csv_path: str = "weather_mumbai_2024_11_synthetic.csv") -> pd.DataFrame:
     """
     Load weather data from local CSV file (fallback function)

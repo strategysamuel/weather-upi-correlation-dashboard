@@ -19,7 +19,7 @@ import argparse
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 # Import pipeline modules
-from weather_api import get_weather_data
+from weather_api import get_weather_data, get_weather_for_range
 from data_loader import load_upi_csv
 from data_validator import validate_datasets
 from data_transformer import DataTransformer
@@ -59,21 +59,18 @@ class WeatherUPIPipeline:
         self.logger.info("=" * 60)
         
         try:
-            # Fetch weather data for November 2024 to match UPI data
-            # Use interactive=True to prompt user for approval if API fails
-            weather_df = get_weather_data(
-                start_date="2024-11-01", 
+            weather_df, source = get_weather_for_range(
+                start_date="2024-11-01",
                 end_date="2024-11-30",
-                use_csv_fallback=False,
-                interactive=True
+                allow_fallback=True
             )
-            
-            if weather_df.empty:
-                raise ValueError("No weather data retrieved from API or fallback CSV")
+            if weather_df is None:
+                raise ValueError("No weather data available")
             
             self.results['weather_data'] = weather_df
             self.logger.info(f"Successfully fetched {len(weather_df)} weather records")
             self.logger.info(f"Weather data columns: {list(weather_df.columns)}")
+            self.logger.info(f"Data source: {source}")
             
             return weather_df
             

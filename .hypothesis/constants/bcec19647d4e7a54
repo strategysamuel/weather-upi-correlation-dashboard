@@ -1,0 +1,4 @@
+# file: D:\SAMUEL\Kiro-Projects\weather-upi-insights\src\data_loader.py
+# hypothesis_version: 6.148.5
+
+[0.7, 10000, 'avg_txn_value_inr', 'coerce', 'confidence', 'cp1252', 'csv', 'date', 'encoding', 'latin-1', 'notes', 'rb', 'source', 'total_upi_txn_count', 'utf-8']

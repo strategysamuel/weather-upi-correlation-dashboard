@@ -24,6 +24,9 @@ import config
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Open-Meteo API URL
+OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
+
 class PipelineError(Exception):
     """Custom exception for pipeline errors"""
     pass
@@ -35,6 +38,85 @@ class FallbackPending(Exception):
 # Mumbai coordinates
 MUMBAI_LAT = 19.07
 MUMBAI_LON = 72.88
+
+def fetch_open_meteo(lat=19.07, lon=72.88, start_date=None, end_date=None, timezone="Asia/Kolkata", timeout=20):
+    """
+    Fetch daily historical weather (temp max/min, rain_sum) from Open-Meteo archive.
+    Returns pandas.DataFrame with columns: date, city, avg_temp_c, humidity_pct, rain_mm, source
+    Returns None when API returns no daily data or on error.
+    """
+    # default range: last 30 days (end = yesterday)
+    today_utc = datetime.utcnow().date()
+    yesterday = today_utc - timedelta(days=1)
+    default_end = yesterday
+    default_start = default_end - timedelta(days=29)
+    
+    if end_date is None:
+        end_date = default_end
+    if start_date is None:
+        start_date = default_start
+    
+    # normalize datetimes to date
+    if isinstance(start_date, str):
+        start_date = datetime.fromisoformat(start_date).date()
+    elif isinstance(start_date, datetime):
+        start_date = start_date.date()
+    if isinstance(end_date, str):
+        end_date = datetime.fromisoformat(end_date).date()
+    elif isinstance(end_date, datetime):
+        end_date = end_date.date()
+    
+    # clamp future dates
+    if end_date > yesterday:
+        logger.info("end_date %s > yesterday (%s); setting end_date=yesterday", end_date, yesterday)
+        end_date = yesterday
+    if start_date > end_date:
+        logger.warning("start_date > end_date after adjustments -> returning None")
+        return None
+    
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "daily": "temperature_2m_max,temperature_2m_min,rain_sum",
+        "start_date": start_date.isoformat(),
+        "end_date": end_date.isoformat(),
+        "timezone": timezone,
+    }
+    
+    logger.info("Attempting Open-Meteo archive request: %s", params)
+    try:
+        resp = requests.get(OPEN_METEO_URL, params=params, timeout=timeout)
+        resp.raise_for_status()
+        j = resp.json()
+    except Exception as e:
+        logger.warning("Open-Meteo request failed: %s", e)
+        return None
+    
+    daily = j.get("daily")
+    if not daily:
+        logger.info("Open-Meteo returned no 'daily' key for %s->%s", params["start_date"], params["end_date"])
+        return None
+    
+    times = daily.get("time", [])
+    if not times:
+        logger.info("Open-Meteo 'daily.time' empty for %s->%s", params["start_date"], params["end_date"])
+        return None
+    
+    df = pd.DataFrame({
+        "date": pd.to_datetime(daily["time"]),
+        "temp_max_c": daily.get("temperature_2m_max"),
+        "temp_min_c": daily.get("temperature_2m_min"),
+        "rain_mm": daily.get("rain_sum"),
+    })
+    df["avg_temp_c"] = df[["temp_max_c", "temp_min_c"]].mean(axis=1)
+    df["city"] = "Mumbai"
+    # humidity not provided by this endpoint — default 60%
+    df["humidity_pct"] = 60.0
+    df = df[["date", "city", "avg_temp_c", "humidity_pct", "rain_mm"]]
+    df["source"] = "api"
+    
+    logger.info("Open-Meteo parsed %d rows for %s->%s", len(df), params["start_date"], params["end_date"])
+    return df
 
 class WeatherAPIClient:
     """MCP client for fetching weather data from Open-Meteo API"""
@@ -466,6 +548,23 @@ def get_weather_data(start_date: str = None, end_date: str = None,
     """
     client = WeatherAPIClient()
     return client.fetch_weather_data(start_date, end_date, use_csv_fallback, interactive)
+def get_weather_for_range(start_date=None, end_date=None, allow_fallback=True):
+    """Get weather data for date range with API-first, CSV-fallback logic"""
+    df_live = fetch_open_meteo(start_date=start_date, end_date=end_date)
+    if df_live is not None and len(df_live) > 0:
+        logger.info("Using LIVE weather data (%d rows)", len(df_live))
+        return df_live, "api"
+    else:
+        logger.info("Live API returned no rows or failed.")
+        if allow_fallback:
+            logger.info("Loading fallback CSV")
+            from .data_loader import load_weather_csv
+            df_csv = load_weather_csv("weather_mumbai_2024_11_synthetic.csv")
+            if df_csv is not None:
+                df_csv["source"] = "csv"
+                return df_csv, "csv"
+        return None, None
+
 def request_csv_fallback(start_date: str = None, end_date: str = None) -> pd.DataFrame:
     """
     Request CSV fallback after user approval (Streamlit-compatible)
