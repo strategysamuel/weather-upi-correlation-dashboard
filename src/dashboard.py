@@ -117,125 +117,7 @@ class WeatherUPIDashboard:
         
         return None
     
-    def render_sidebar_controls(self):
-        """Render sidebar controls for data fetching"""
-        st.sidebar.header("🌦️ Weather Data Controls")
-        
-        # Default date range (last 30 days)
-        default_start, default_end = self.get_default_date_range()
-        
-        # Date range selector
-        st.sidebar.subheader("📅 Date Range")
-        start_date = st.sidebar.date_input(
-            "Start Date",
-            value=default_start,
-            max_value=date.today(),
-            key="start_date"
-        )
-        
-        end_date = st.sidebar.date_input(
-            "End Date", 
-            value=default_end,
-            max_value=date.today(),
-            key="end_date"
-        )
-        
-        # Validate date range
-        date_error = self.validate_date_range(start_date, end_date)
-        if date_error:
-            st.sidebar.error(date_error)
-            return None, None, None, None, None, None
-        
-        # API options
-        st.sidebar.subheader("🔧 Fetch Options")
-        try_live = st.sidebar.checkbox(
-            "Try live API first",
-            value=True,
-            help="Attempt to fetch live weather data from Open-Meteo API"
-        )
-        
-        auto_fallback = st.sidebar.checkbox(
-            "Auto fallback to CSV (no prompt)",
-            value=False,
-            help="Automatically use CSV fallback if live API fails (no user prompt)"
-        )
-        
-        # Refresh interval
-        refresh_interval = st.sidebar.selectbox(
-            "Auto-refresh interval",
-            options=[None, "5 min", "15 min", "60 min"],
-            index=0,
-            help="Automatically refresh data at selected interval"
-        )
-        
-        # Fetch button
-        fetch_clicked = st.sidebar.button(
-            "🔄 Fetch data for selected range",
-            type="primary",
-            help="Fetch weather data for the selected date range"
-        )
-        
-        return start_date, end_date, try_live, auto_fallback, refresh_interval, fetch_clicked
-    
-    def render_sidebar_controls(self):
-        """Render sidebar controls for date selection and options"""
-        st.sidebar.header("🎛️ Controls")
-        
-        # Default date range (last 30 days)
-        default_start, default_end = self.get_default_date_range()
-        
-        # Date range selector
-        st.sidebar.subheader("📅 Date Range")
-        start_date = st.sidebar.date_input(
-            "Start Date",
-            value=default_start,
-            max_value=date.today(),
-            key="start_date"
-        )
-        
-        end_date = st.sidebar.date_input(
-            "End Date", 
-            value=default_end,
-            max_value=date.today(),
-            key="end_date"
-        )
-        
-        # Validate date range
-        date_error = self.validate_date_range(start_date, end_date)
-        if date_error:
-            st.sidebar.error(date_error)
-            return None, None, None, None, None, None
-        
-        # API options
-        st.sidebar.subheader("🔧 Fetch Options")
-        try_live = st.sidebar.checkbox(
-            "Try live API first",
-            value=True,
-            help="Attempt to fetch live weather data from Open-Meteo API"
-        )
-        
-        auto_fallback = st.sidebar.checkbox(
-            "Auto fallback to CSV (no prompt)",
-            value=False,
-            help="Automatically use CSV fallback if live API fails (no user prompt)"
-        )
-        
-        # Refresh interval
-        refresh_interval = st.sidebar.selectbox(
-            "Auto-refresh interval",
-            options=[None, "5 min", "15 min", "60 min"],
-            index=0,
-            help="Automatically refresh data at selected interval"
-        )
-        
-        # Fetch button
-        fetch_clicked = st.sidebar.button(
-            "🔄 Fetch data for selected range",
-            type="primary",
-            help="Fetch weather data for the selected date range"
-        )
-        
-        return start_date, end_date, try_live, auto_fallback, refresh_interval, fetch_clicked
+
     
     def render_data_source_badge(self):
         """Render data source badge"""
@@ -489,7 +371,8 @@ class WeatherUPIDashboard:
         
         fetch_btn = st.sidebar.button("🚀 Fetch data for selected range")
         
-        return start_date, end_date, try_live, auto_fallback, upi_simulator, refresh_interval, fetch_btn
+        # Explicitly return 7 values to avoid unpacking errors
+        return (start_date, end_date, try_live, auto_fallback, upi_simulator, refresh_interval, fetch_btn)
     
     def render_data_source_badge(self):
         """Render data source badges for both weather and UPI data"""
@@ -823,7 +706,7 @@ class WeatherUPIDashboard:
             )
             st.plotly_chart(fig, use_container_width=True)
     
-    def do_fetch(self, start_date, end_date, try_live, auto_fallback):
+    def do_fetch(self, start_date, end_date, try_live, auto_fallback, upi_simulator=True):
         """Handle data fetching logic"""
         # Import here to avoid circular imports
         from weather_api import fetch_open_meteo
@@ -882,10 +765,11 @@ class WeatherUPIDashboard:
             st.session_state.weather_source = None
         
         # Render sidebar controls
-        start_date, end_date, try_live, auto_fallback, refresh_interval, fetch_btn = self.render_sidebar_controls()
+        controls = self.render_sidebar_controls()
+        start_date, end_date, try_live, auto_fallback, upi_simulator, refresh_interval, fetch_btn = controls
         
         if fetch_btn:
-            self.do_fetch(start_date, end_date, try_live, auto_fallback)
+            self.do_fetch(start_date, end_date, try_live, auto_fallback, upi_simulator)
         
         # show badge
         if st.session_state.weather_source == "api":
